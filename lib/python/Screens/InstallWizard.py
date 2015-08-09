@@ -21,7 +21,8 @@ class InstallWizard(Screen, ConfigListScreen):
 	STATE_CHOISE_PICONS = 2
 	STATE_CHOISE_MBOOT = 3
 	STATE_CHOISE_CARDSERVER = 5
-	
+	STATE_CHOISE_HBBTV = 6
+
 	def __init__(self, session, args = None):
 		Screen.__init__(self, session)
 
@@ -77,6 +78,12 @@ class InstallWizard(Screen, ConfigListScreen):
 			self.cache_type = ConfigSelection(choices = modes, default = "openmultiboot")
 			self.createMenu()
 
+		elif self.index == self.STATE_CHOISE_HBBTV:
+			self.enabled = ConfigYesNo(default = True)
+			modes = {"browser": "Install"}
+			self.hbbtv_type = ConfigSelection(choices = modes, default = "browser")
+			self.createMenu()
+
 	def checkNetworkCB(self, data):
 		if data < 3:
 			config.misc.installwizard.hasnetwork.value = True
@@ -125,7 +132,12 @@ class InstallWizard(Screen, ConfigListScreen):
 			self.list.append(getConfigListEntry(_("Install Multiboot"), self.enabled))
 			if self.enabled.value:
 				self.list.append(getConfigListEntry(_("Multiboot type"), self.cache_type))
-				
+
+		elif self.index == self.STATE_CHOISE_HBBTV:
+			self.list.append(getConfigListEntry(_("Install Hbbtv support"), self.enabled))
+			if self.enabled.value:
+				self.list.append(getConfigListEntry(_("Hbbtv type"), self.hbbtv_type))
+
 		self["config"].list = self.list
 		self["config"].l.setList(self.list)
 
@@ -159,6 +171,10 @@ class InstallWizard(Screen, ConfigListScreen):
 
 		elif self.index == self.STATE_CHOISE_MBOOT and self.enabled.value:
 			self.session.open(InstallWizardIpkgUpdater, self.index, _('Please wait (downloading multiboot)'), IpkgComponent.CMD_INSTALL, {'package': 'enigma2-plugin-extensions-' + self.cache_type.value})
+
+		elif self.index == self.STATE_CHOISE_HBBTV and self.enabled.value:
+			self.session.open(InstallWizardIpkgUpdater, self.index, _('Please wait (downloading hbbtv)'), IpkgComponent.CMD_INSTALL, {'package': 'hbbtv-' + self.hbbtv_type.value})
+
 		return
 
 class InstallWizardIpkgUpdater(Screen):

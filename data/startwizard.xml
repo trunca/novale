@@ -198,12 +198,25 @@ self.selectKey("LEFT")
 self.selectKey("RIGHT")
 			</code>
 		</step>
-		<step id="cardserver">
+		<step id="cardserver" nextstep="hbbtv">
 			<condition>
 self.condition = config.misc.installwizard.hasnetwork.value and config.misc.installwizard.ipkgloaded.value
 			</condition>
 			<text value="Would you like to install a cardserver?" />
 			<config screen="InstallWizard" module="InstallWizard" args="5" type="ConfigList" />
+			<code>
+self.clearSelectedKeys()
+self.selectKey("LEFT")
+self.selectKey("RIGHT")
+			</code>
+		</step>
+
+		<step id="hbbtv">
+			<condition>
+self.condition = config.misc.installwizard.hasnetwork.value and config.misc.installwizard.ipkgloaded.value
+			</condition>
+			<text value="Would you like to install Hbbtv support?" />
+			<config screen="InstallWizard" module="InstallWizard" args="6" type="ConfigList" />
 			<code>
 self.clearSelectedKeys()
 self.selectKey("LEFT")
