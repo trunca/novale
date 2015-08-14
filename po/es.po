@@ -16,6 +16,20 @@ msgstr ""
 "X-Generator: Poedit 1.6.10\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
+#quickbutton
+
+msgid "assigned to long red"
+msgstr "Asignar pulsacción larga boton verde"
+
+msgid "assigned to long yellow"
+msgstr "Asignar pulsacción larga boton amarillo"
+
+msgid "assigned to long azul"
+msgstr "Asignar pulsacción larga boton azul"
+
+msgid "assigned to long green"
+msgstr "Asignar pulsacción larga boton rojo"
+
 msgid "Update Image"
 msgstr "Actualizar Imagen"
 
