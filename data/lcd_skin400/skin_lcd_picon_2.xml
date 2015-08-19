@@ -18,7 +18,7 @@
 		<!-- pick a funky name for the font, so we don't conflict  -->
 		<font filename="nmsbd.ttf" name="FdLcD" scale="100"/>
 		<font filename="/usr/share/fonts/lcd.ttf" name="LCD" scale="100"/>
-		<font filename="/usr/share/fonts/OpenSans-Regular.ttf" name="RegularLCD" scale="95"/>
+		<font filename="/usr/share/enigma2/GigabluePax/fonts/OpenSans-Regular.ttf" name="RegularLCD" scale="95"/>
 	</fonts>
 
 <!-- main-->
@@ -26,7 +26,7 @@
 		<widget source="session.CurrentService" render="PiconLCD" zPosition="1" position="250,0" size="150,90" alphatest="on" >
 			<convert type="ServiceName">Reference</convert>
 		</widget>
-		<widget source="session.Event_Now" render="Label" position="0,100" size="400,90" font="RegularLCD;40" halign="center" valign="center" >
+		<widget source="session.Event_Now" render="Label" position="0,90" size="400,110" font="RegularLCD;40" halign="center" valign="center" >
 			<convert type="EventName">Name</convert>
 		</widget>
 		<widget source="session.Event_Now" render="Label" position="0,200" size="200,40" font="RegularLCD;40" foregroundColor="#F78181" >
@@ -35,68 +35,6 @@
 		</widget>		
 		<widget source="session.Event_Now" render="Progress" position="200,200" size="200,40" borderWidth="4" >
 			<convert type="EventTime">Progress</convert>
-		</widget>
-	</screen>
-		<!-- movieplayer-->
-	<screen name="InfoBarMoviePlayerSummary" position="fill">
-		<widget source="session.CurrentService" render="Label" position="0,5" size="400,65" font="FdLcD;36" halign="center" foregroundColor="#FFFF00" >
-			<convert type="ServiceName">Name</convert>
-		</widget>
-
-		<widget source="session.Event_Now" render="Label" position="0,70" size="400,50" font="FdLcD;24" halign="center" >
-			<convert type="EventName">Description</convert>
-		</widget>
-
-		<widget source="session.CurrentService" render="Progress" position="60,135" size="270,20" borderWidth="1">
-			<convert type="ServicePosition">Position</convert>
-		</widget>
-
-		<widget source="session.Event_Now" render="Label" position="335,131" size="70,20" font="Regular; 20" foregroundColor="#F78181" >
-			<convert type="EventTime">Remaining</convert>
-			<convert type="RemainingToText">FOLLOW</convert>
-		</widget>
-
-		<widget source="session.CurrentService" render="Label" position="5,131" size="50,20" font="Regular; 20" foregroundColor="#F78181" noWrap="1">
-				<convert type="ServicePosition">Position</convert>
-		</widget>
-
-		<widget source="session.RecordState" render="FixedLabel" text="Recording" position="130,220" size="110,25" halign="Left" foregroundColor="#ff0000" font="FdLcD;16" zPosition="1" noWrap="1" >
-			<convert type="ConditionalShowHide">Blink</convert>
-		</widget>
-
-		<panel name="SummaryClockPanel" />
-	</screen>
-	<screen name="MovieContextMenuSummary" position="fill">
-		<widget source="parent.Title" render="Label" position="top" size="*,14" font="FdLcD;16" halign="left" valign="top" noWrap="1" />
-		<widget source="selected" render="Label" position="top" size="*,32" font="FdLcD;16" />
-		<panel position="bottom" size="*,18">
-			<widget source="global.CurrentTime" render="Label" position="right" size="60,*" halign="right" font="FdLcD;16" >
-				<convert type="ClockToText"></convert>
-			</widget>
-		</panel>
-	</screen>
-	<screen name="MovieSelectionSummary" position="fill">
-		<widget source="parent.Title" render="Label" position="top" size="*,14" font="FdLcD;16" halign="left" valign="top" noWrap="1" />
-		<widget source="name" render="Label" position="top" size="*,32" font="FdLcD;16" halign="left" valign="top" />
-		<panel position="bottom" size="*,18">
-			<widget source="parent.Service" render="Label" position="right" size="46,*" font="FdLcD;14" halign="left" noWrap="1">
-				<convert type="MovieInfo">FileSize</convert>
-			</widget>
-			<widget source="parent.Service" render="Label" position="fill" font="FdLcD;14" halign="left" noWrap="1">
-				<convert type="MovieInfo">RecordServiceName</convert>
-			</widget>
-		</panel>
-	</screen>
-	<!-- standby -->
-	<screen name="StandbySummary" position="0,0" size="400,240">
-		<widget source="global.CurrentTime" render="Label" position="center,50" size="400,24" font="FdLcD;22" halign="center"  noWrap="1">
-			<convert type="ClockToText">Format:%d.%m.%Y</convert>
-		</widget>
-		<widget source="global.CurrentTime" render="Label" position="center,center" size="225,100" font="FdLcD;85" halign="center" noWrap="1">
-			<convert type="ClockToText">Format:%H:%M</convert>
-		</widget>
-		<widget source="session.RecordState" render="FixedLabel" text="Recording" position="center,160" size="190,22" font="FdLcD;22" zPosition="2" valign="bottom" halign="center" noWrap="1" foregroundColor="#ff0000" >
-			<convert type="ConditionalShowHide">Blink</convert>
 		</widget>
 	</screen>
 	<include filename="/usr/share/enigma2/lcd_skin/common.xml" />
