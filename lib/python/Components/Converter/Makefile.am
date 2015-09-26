@@ -8,4 +8,5 @@ install_PYTHON = \
 	ServiceOrbitalPosition.py CryptoInfo.py TextCase.py \
 	ValueBitTest.py TunerInfo.py ConfigEntryTest.py TemplatedMultiContent.py ProgressToText.py \
 	Combine.py SensorToText.py OMaclock.py ValueToPixmap.py PliExtraInfo.py genre.py TransponderInfo.py \
-	RotorPosition.py
+	RotorPosition.py CaidInfo2.py CamdRAED.py FanTempInfo.py MaggyEventName.py MSNWeather.py RouteInfo.py \
+	ServiceName2.py VAudioInfo.py
