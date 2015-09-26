@@ -5,4 +5,4 @@ install_PYTHON = \
 	FixedLabel.py PositionGauge.py Canvas.py Picon.py Pig.py MaggyRunningText.py \
 	FrontpanelLed.py ChannelNumber.py VideoSize.py NextEpgInfo.py AudioIcon.py \
 	OMaClockLcd.py OMMetrixWeatherWidget.py OMNextEvent.py PiconLCD.py Volume2Text.py PiconRes.py PiconX.py \ 
-	RunningText.py
+	RunningText.py \
