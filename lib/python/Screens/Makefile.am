@@ -4,7 +4,7 @@ installdir = $(pkglibdir)/python/Screens
 
 install_PYTHON = \
 	AudioSelection.py ChannelSelection.py ClockDisplay.py ConfigMenu.py CopyFiles.py InfoBar.py SFextra.py \
-	Menu.py	MessageBox.py Screen.py ServiceScan.py TimerEdit.py \
+	Menu.py	MessageBox.py Screen.py ServiceScan.py TimerEdit.py sfupgrade.py \
 	MovieSelection.py Setup.py About.py HarddiskSetup.py FixedMenu.py \
 	Satconfig.py ScanSetup.py NetworkSetup.py Ci.py TimerEntry.py Volume.py \
 	EpgSelection.py EventView.py Mute.py Standby.py ServiceInfo.py \
