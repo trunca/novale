@@ -1,4 +1,4 @@
-SUBDIRS = countries fonts extensions keymaps skin_default rc_models hw_info sfpanel
+SUBDIRS = countries fonts extensions keymaps skin_default rc_models hw_info 
 dist_pkgdata_DATA = \
 	encoding.conf \
 	keymap.xml \
