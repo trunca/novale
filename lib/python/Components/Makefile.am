@@ -19,6 +19,6 @@ install_PYTHON = \
 	Element.py Playlist.py ParentalControl.py \
 	Ipkg.py SelectionList.py Scanner.py SystemInfo.py PackageInfo.py \
 	Task.py Console.py ResourceManager.py TuneTest.py \
-	Keyboard.py Sensors.py FanControl.py RcModel.py\
+	Keyboard.py Sensors.py FanControl.py RcModel.py WeatherMSN.py \
 	Netlink.py InputHotplug.py \
 	opkg.py
