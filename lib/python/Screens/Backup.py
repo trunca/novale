@@ -104,7 +104,7 @@ class BackupPanelhdd(Screen):
         self.session.open(Mount.HddMount)
 
     def HaceBackup(self, ret):
-        cmdhdd = '/usr/bin/backup /media/HDD'
+        cmdhdd = '/usr/bin/backup /media/hdd'
         if ret:
             self.session.open(SFConsole, _('Backup to HDD'), [cmdhdd])
             self.close()
