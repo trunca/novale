@@ -12,7 +12,7 @@ from Components.ScrollLabel import ScrollLabel
 from Tools.GetEcmInfo import GetEcmInfo
 from Tools.Directories import resolveFilename, SCOPE_PLUGINS, SCOPE_LANGUAGE
 import os
-from CardControl import CardControlService
+from CamControl import CamControlService
 from enigma import eTimer, eDVBCI_UI, eListboxPythonStringContent, eListboxPythonConfigContent
 
 class ConfigAction(ConfigElement):
@@ -31,40 +31,40 @@ class ConfigAction(ConfigElement):
         pass
 
 
-class CardserverSetup(Screen, ConfigListScreen):
-    skin = '\n\t<screen name="CardserverSetup" position="center,center" size="560,450" >\n\t\t<widget name="config" position="5,10" size="550,90" />\n\t\t<widget name="info" position="5,100" size="550,300" font="Fixed;18" />\n\t\t<ePixmap name="red" position="85,410" zPosition="1" size="140,40" pixmap="skin_default/buttons/red.png" transparent="1" alphatest="on" />\n\t\t<ePixmap name="green" position="330,410" zPosition="1" size="140,40" pixmap="skin_default/buttons/green.png" transparent="1" alphatest="on" />\n\t\t<widget name="key_red" position="20,405" zPosition="2" size="270,50" valign="center" halign="center" font="Regular;21" transparent="1" shadowColor="black" shadowOffset="-1,-1" />\n\t\t<widget name="key_green" position="265,405" zPosition="2" size="270,50" valign="center" halign="center" font="Regular;21" transparent="1" shadowColor="black" shadowOffset="-1,-1" />\n\t</screen>'
+class SoftcamSetupSF(Screen, ConfigListScreen):
+    skin = '\n\t<screen name="SoftcamSetup" position="center,center" size="560,450" >\n\t\t<widget name="config" position="5,10" size="550,90" />\n\t\t<widget name="info" position="5,100" size="550,300" font="Fixed;18" />\n\t\t<ePixmap name="red" position="85,410" zPosition="1" size="140,40" pixmap="skin_default/buttons/red.png" transparent="1" alphatest="on" />\n\t\t<ePixmap name="green" position="330,410" zPosition="1" size="140,40" pixmap="skin_default/buttons/green.png" transparent="1" alphatest="on" />\n\t\t<widget name="key_red" position="20,405" zPosition="2" size="270,50" valign="center" halign="center" font="Regular;21" transparent="1" shadowColor="black" shadowOffset="-1,-1" />\n\t\t<widget name="key_green" position="265,405" zPosition="2" size="270,50" valign="center" halign="center" font="Regular;21" transparent="1" shadowColor="black" shadowOffset="-1,-1" />\n\t</screen>'
 
     def __init__(self, session):
         Screen.__init__(self, session)
-        self.setup_title = _('Cardserver Setup')
-        self["lab1"] = Label()
+        self.setup_title = _('Softcam Setup')
+	self["lab1"] = Label()
         self['actions'] = ActionMap(['OkCancelActions', 'ColorActions', 'CiSelectionActions'], {'cancel': self.cancel,
-         'blue': self.cardtest,
+         'blue': self.camtest,
          'green': self.save,
          'red': self.cancel}, -1)
         self.list = []
         ConfigListScreen.__init__(self, self.list, session=session)
-        self.cardserver = CardControlService('cardserver')
+        self.softcam = CamControlService('softcam')
         self.ecminfo = GetEcmInfo()
         newEcmFound, ecmInfo = self.ecminfo.getEcm()
         self['info'] = ScrollLabel(''.join(ecmInfo))
         self.EcmInfoPollTimer = eTimer()
         self.EcmInfoPollTimer.callback.append(self.setEcmInfo)
         self.EcmInfoPollTimer.start(1000)
-        cardservers = self.cardserver.getList()
-        self.cardservers = ConfigSelection(choices=cardservers)
-        self.cardservers.value = self.cardserver.current()
-        self.list.append(getConfigListEntry(_('Select cardserver'), self.cardservers))
-        self.list.append(getConfigListEntry(_('Restart cardserver'), ConfigAction(self.restart, 's')))
-        self["lab1"].setText("%d  Cams Instaladas" % (len(self.list)))
+        softcams = self.softcam.getList()
+        self.softcams = ConfigSelection(choices=softcams)
+        self.softcams.value = self.softcam.current()
+        self.list.append(getConfigListEntry(_('Select softcam'), self.softcams))
+        self.list.append(getConfigListEntry(_('Restart softcam'), ConfigAction(self.restart, 's')))
+	self["lab1"].setText("%d  Cams Instaladas" % (len(self.list)))
         self['key_red'] = Label(_('Cancel'))
         self['key_green'] = Label(_('OK'))
-        self['key_blue'] = Label(_('Test Card'))
+        self['key_blue'] = Label(_('Test Cam'))
         self.onLayoutFinish.append(self.layoutFinished)
 
-    def cardtest(self):
+    def camtest(self):
         import Mediatomb
-        self.session.open(Mediatomb.testcard)
+        self.session.open(Mediatomb.testcam)
 
     def setEcmInfo(self):
         newEcmFound, ecmInfo = self.ecminfo.getEcm()
@@ -77,7 +77,7 @@ class CardserverSetup(Screen, ConfigListScreen):
     def restart(self, what):
         self.what = what
         if 's' in what:
-            msg = _('Please wait, restarting cardserver.')
+            msg = _('Please wait, restarting softcam.')
         self.mbox = self.session.open(MessageBoxSF, msg, MessageBoxSF.TYPE_INFO)
         self.activityTimer = eTimer()
         self.activityTimer.timeout.get().append(self.doStop)
@@ -86,7 +86,7 @@ class CardserverSetup(Screen, ConfigListScreen):
     def doStop(self):
         self.activityTimer.stop()
         if 's' in self.what:
-            self.cardserver.command('stop')
+            self.softcam.command('stop')
         self.oldref = self.session.nav.getCurrentlyPlayingServiceReference()
         self.session.nav.stopService()
         self.activityTimer = eTimer()
@@ -97,20 +97,24 @@ class CardserverSetup(Screen, ConfigListScreen):
         self.activityTimer.stop()
         del self.activityTimer
         if 's' in self.what:
-            self.cardserver.select(self.cardservers.value)
-            self.cardserver.command('start')
+            self.softcam.select(self.softcams.value)
+            self.softcam.command('start')
         if self.mbox:
             self.mbox.close()
         self.close()
         self.session.nav.playService(self.oldref)
         del self.oldref
 
-    def restartCardserver(self):
+    def restartCardServer(self):
+        if hasattr(self, 'cardservers'):
+            self.restart('c')
+
+    def restartSoftcam(self):
         self.restart('s')
 
     def save(self):
         what = ''
-        if self.cardservers.value != self.cardserver.current():
+        if self.softcams.value != self.softcam.current():
             what = 's'
         if what:
             self.restart(what)

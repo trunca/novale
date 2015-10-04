@@ -154,7 +154,6 @@ class mainSFPanel(Screen):
 		self.sublist.append(SFSubMenuEntryComponent(_("CCcam suite"),_("Informacion CCcam emu"),_('Acceda a toda la informacion de su emuladora cccam')))
 		self.sublist.append(SFSubMenuEntryComponent(_("Oscam suite"),_("Informacion oscam emu"),_('Acceda a toda la informacion de su emuladora oscam')))
 		self.sublist.append(SFSubMenuEntryComponent(_("Gbox suite"),_("Informacion Gbox emu"),_('Acceda a toda la informacion de su emuladora gbox o mbox')))
-		self.sublist.append(SFSubMenuEntryComponent(_("Install CCcam.cfg"),_("Install CCcam.cfg"),_('Instala CCcam.cfg desde Pendrive')))
 		self["sublist"].l.setList(self.sublist)
 ######## Menu backup ##############################
 	def SFBackup(self):
@@ -288,10 +287,6 @@ class mainSFPanel(Screen):
            	        sys.path.append('/usr/lib/enigma2/python/Screens/SFextra/GboxSuite')
 	   	        import gboxsuite
             		self.session.open(gboxsuite.GboxSuiteMainMenu)
-		elif item[0] == _("Install CCcam.cfg"):
-           	        self.cccam()
-
-
 
 ######## Seleccion backup menu ##############################
 		if item[0] == _("Backup HDD"):
@@ -406,8 +401,7 @@ class mainSFPanel(Screen):
 
 ######## Seleccion infopanel ##############################
 		if item[0] == _("Check memory"):
-			import SFextra
-            		self.session.open(SFextra.memoryinfo)
+			self.session.open(SFConsole, title=_('Check memory usage'), cmdlist=['cat /proc/meminfo'])
 		elif item[0] == _("Proc information"):
 			self.session.open(SFConsole, title=_('Proc information'), cmdlist=['cat /proc/stb/info/boxtype & cat /proc/stb/info/gbmodel & cat /proc/stb/info/model & cat /proc/stb/info/chipset & cat /proc/stb/info/version'])
 		elif item[0] == _("Ecm information"):
@@ -491,7 +485,7 @@ class mainSFPanel(Screen):
 		f = open("/tmp/.memory")
 		mused = f.readline()
 		f.close()
-		self.mbox = self.session.open(MessageBox,_("Used memory after execution: %s ") % (mused), MessageBox.TYPE_INFO, timeout = 20 )
+		self.mbox = self.session.open(MessageBox,_("free memory after execution: %s ") % (mused), MessageBox.TYPE_INFO, timeout = 20 )
 
 	def passreset(self):
 		os.system("passwd -d root")
@@ -499,12 +493,6 @@ class mainSFPanel(Screen):
         def updatefeeds(self):
                 os.system("opkg update")
                 self.mbox = self.session.open(MessageBox,_("Lista feed actualizada"), MessageBox.TYPE_INFO, timeout = 10 )
-        def cccam(self):
-		if os.path.isfile("/media/usb/hola.cfg"):
-                	os.system("cp /media/usb/hola.cfg /etc/")
-                	self.mbox = self.session.open(MessageBox,_("CCcam.cfg instalado correctamente"), MessageBox.TYPE_INFO, timeout = 10 )
-		else:
-			self.mbox = self.session.open(MessageBox,_("No existe archivo CCcam.cfg en /media/usb"), MessageBox.TYPE_INFO, timeout = 10 )
 
 #############software infopanel################################
 

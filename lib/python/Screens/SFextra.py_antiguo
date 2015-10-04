@@ -400,7 +400,6 @@ class wifipanel(Screen):
         self['list'] = List(l)
         self['setupActions'] = ActionMap(['SetupActions'], {'cancel': self.quit,
          'ok': self.openSelected}, -2)
-	self["key_red"] = StaticText(_("Close"))
 	
 
     def buildListEntry(self, description, image):
@@ -1198,12 +1197,7 @@ class skinpart(Screen):
 
 		
 	def remove(self):
-                self.session.openWithCallback(self.remove2,MessageBox,_("Se va a borrar la skinpart, estas seguro?? recuerda tras borrarla instalar otra skinpart del mismo modelo a la borrada"), MessageBox.TYPE_YESNO)
-
-	def remove2(self, answer):
-		if answer is True:
-			os.system("opkg remove %s" % self["menu"].getCurrent()[0])
-			self.mbox = self.session.open(MessageBox,_("skinpart is delete"), MessageBox.TYPE_INFO, timeout = 10 )
+		os.system("opkg remove %s" % self["menu"].getCurrent()[0])
 
 	def restartGUI(self, answer):
 		if answer is True:
@@ -1215,77 +1209,6 @@ class skinpart(Screen):
 		self.ctimer.stop()
 		self.close()
 ####################################
-##############################################################################
-class memoryinfo(Screen):
-	skin = """
-<screen name="memoryinfo" position="209,48" size="865,623" title="Memory Info" flags="wfNoBorder" backgroundColor="transparent">
-	    <ePixmap pixmap="SF_HD/Bg_EPG_view.png" zPosition="-1" position="0,0" size="865,623" alphatest="on" />
-    <ePixmap pixmap="SF_HD/menu/ico_backup.png" position="32,41" size="40,40" alphatest="blend" transparent="1" />
-    <widget source="Title" render="Label" position="90,50" size="600,32" font="Semiboldit;32" foregroundColor="#5d5d5d" backgroundColor="#27b5b9bd" transparent="1" />
-    <ePixmap pixmap="SF_HD/icons/clock.png" position="750,55" zPosition="1" size="20,20" alphatest="blend" />
-    <widget source="global.CurrentTime" render="Label" position="770,57" zPosition="1" size="50,20" font="Regular;20" foregroundColor="foreground" backgroundColor="#27d9dee2" halign="right" transparent="1">
-      <convert type="ClockToText">Format:%H:%M</convert>
-    </widget>
-    <ePixmap pixmap="SF_HD/border_sf.png" position="125,165" zPosition="-1" size="620,420" transparent="1" alphatest="blend" />
-    <ePixmap pixmap="SF_HD/buttons/red.png" position="45,98" size="25,25" alphatest="blend" />
-    <ePixmap pixmap="SF_HD/buttons/green.png" position="240,98" size="25,25" alphatest="blend" />
-    <widget source="key_green" render="Label" position="278,101" zPosition="1" size="150,25" font="Regular;20" halign="center" valign="center" backgroundColor="darkgrey" foregroundColor="foreground" transparent="1" />
-    <widget source="key_red" render="Label" position="86,101" zPosition="1" size="150,25" font="Regular;20" halign="center" valign="center" backgroundColor="darkgrey" foregroundColor="foreground" transparent="1" />
-<widget source="MemoryLabel" render="Label" position="161,200" size="150,22" font="Regular; 26" halign="right" foregroundColor="black" backgroundColor="#a7a7a7" valign="center" transparent="1" />
-	<widget source="memTotal" render="Label" position="161,242" zPosition="2" size="450,22" font="Regular;20" halign="left" valign="center" backgroundColor="#a7a7a7" foregroundColor="blue" transparent="1" />
-	<widget source="bufCache" render="Label" position="161,269" zPosition="2" size="450,22" font="Regular;20" halign="left" valign="center" backgroundColor="#a7a7a7" foregroundColor="white" transparent="1" />
-<ePixmap pixmap="SF_HD/liberar_ram.png" zPosition="-1" position="300,290" size="300,300" alphatest="on" />
-   </screen>"""
-
-	def __init__(self, session):
-		self.session = session
-		Screen.__init__(self, session)
-		self["memTotal"] = StaticText()
-		self["bufCache"] = StaticText()
-		self["MemoryLabel"] = StaticText(_("Memory:"))
-		self["shortcuts"] = ActionMap(["ShortcutActions", "WizardActions"],
-		{
-			"green": self.clear,
-			"cancel": self.exit,
-			"back": self.exit,
-			"red": self.exit,
-			"ok": self.exit,
-			})
-		self["key_red"] = StaticText(_("Close"))
-		self["key_green"] = StaticText(_("free memory"))
-                self.onShow.append(self.Title)
 
 
-	def Title(self):
-		self.setTitle(_("Memory info"))
-		self.infomem()
-
-	def clear(self):
-		os.system("sync ; echo 3 > /proc/sys/vm/drop_caches")
-
-		
-
-	def infomem(self):
-		memtotal = memfree = buffers = cached = ''
-		persent = 0
-		if fileExists('/proc/meminfo'):
-			for line in open('/proc/meminfo'):
-				if 'MemTotal:' in line:
-					memtotal = line.split()[1]
-				elif 'MemFree:' in line:
-					memfree = line.split()[1]
-				elif 'Buffers:' in line:
-					buffers = line.split()[1]
-				elif 'Cached:' in line:
-					cached = line.split()[1]
-			if '' is not memtotal and '' is not memfree:
-				persent = int(memfree) / (int(memtotal) / 100)
-			self["memTotal"].text = _("Total: %s Kb  Free: %s Kb (%s %%)") % (memtotal, memfree, persent)
-			self["bufCache"].text = _("Buffers: %s Kb  Cached: %s Kb") % (buffers, cached)
-
-		
-	def exit(self):
-		self.close()
-		
-	
 
