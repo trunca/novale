@@ -1262,7 +1262,8 @@ class memoryinfo(Screen):
 
 	def clear(self):
 		os.system("sync ; echo 3 > /proc/sys/vm/drop_caches")
-
+		self.mbox = self.session.open(MessageBox,(_("memoria liberada")), MessageBox.TYPE_INFO, timeout = 4 )
+		self.infomem()
 		
 
 	def infomem(self):
@@ -1288,4 +1289,5 @@ class memoryinfo(Screen):
 		self.close()
 		
 	
+
 
