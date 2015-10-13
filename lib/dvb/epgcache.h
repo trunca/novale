@@ -40,7 +40,7 @@ struct uniqueEPGKey
 		,onid( ref.type != eServiceReference::idInvalid ? ((eServiceReferenceDVB&)ref).getOriginalNetworkID().get() : -1 )
 		,tsid( ref.type != eServiceReference::idInvalid ? ((eServiceReferenceDVB&)ref).getTransportStreamID().get() : -1 )
 	{
-	} mhw_channel_equiv_t;
+	} 
 	uniqueEPGKey()
 		:sid(-1), onid(-1), tsid(-1)
 	{
@@ -149,6 +149,20 @@ class eEPGCache: public eMainloop, private eThread, public Object
 		ePtr<eConnection> m_VirginNowNextConn, m_VirginScheduleConn;
 		ePtr<iDVBSectionReader> m_VirginNowNextReader, m_VirginScheduleReader;
 #endif
+typedef struct {
+	u_char original_nid_hi;
+	u_char original_nid_lo;
+	u_char original_tid_hi;
+	u_char original_tid_lo;
+	u_char original_sid_hi;
+	u_char original_sid_lo;
+	u_char equiv_nid_hi;
+	u_char equiv_nid_lo;
+	u_char equiv_tid_hi;
+	u_char equiv_tid_lo;
+	u_char equiv_sid_hi;
+	u_char equiv_sid_lo;
+} mhw_channel_equiv_t;
 #ifdef ENABLE_NETMED
 		ePtr<eConnection> m_NetmedScheduleConn, m_NetmedScheduleOtherConn;
 		ePtr<iDVBSectionReader> m_NetmedScheduleReader, m_NetmedScheduleOtherReader;
