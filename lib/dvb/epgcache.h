@@ -197,11 +197,6 @@ class eEPGCache: public eMainloop, private eThread, public Object
 		void timeMHW2DVB( int minutes, u_char *return_time);
 		void timeMHW2DVB( u_char day, u_char hours, u_char minutes, u_char *return_time);
 		void storeMHWTitle(std::map<uint32_t, mhw_title_t>::iterator itTitle, std::string sumText, const uint8_t *data);
-		void GetEquiv(void);
-		int nb_equiv;
-		bool log_open ();
-		void log_close();
-		void log_add (char *message, ...);
 #endif
 		void readData(const uint8_t *data, int source);
 		void startChannel();
