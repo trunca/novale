@@ -40,7 +40,7 @@ struct uniqueEPGKey
 		,onid( ref.type != eServiceReference::idInvalid ? ((eServiceReferenceDVB&)ref).getOriginalNetworkID().get() : -1 )
 		,tsid( ref.type != eServiceReference::idInvalid ? ((eServiceReferenceDVB&)ref).getTransportStreamID().get() : -1 )
 	{
-	}
+	} mhw_channel_equiv_t;
 	uniqueEPGKey()
 		:sid(-1), onid(-1), tsid(-1)
 	{
