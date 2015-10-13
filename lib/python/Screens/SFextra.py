@@ -1218,7 +1218,7 @@ class skinpart(Screen):
 ##############################################################################
 class memoryinfo(Screen):
 	skin = """
-<screen name="memoryinfo" position="209,48" size="865,623" title="Memory Info" flags="wfNoBorder" backgroundColor="transparent">
+<screen name="memoryinfo" position="209,48" size="865,623" title="Clear Memory" flags="wfNoBorder" backgroundColor="transparent">
 	    <ePixmap pixmap="SF_HD/Bg_EPG_view.png" zPosition="-1" position="0,0" size="865,623" alphatest="on" />
     <ePixmap pixmap="SF_HD/menu/ico_backup.png" position="32,41" size="40,40" alphatest="blend" transparent="1" />
     <widget source="Title" render="Label" position="90,50" size="600,32" font="Semiboldit;32" foregroundColor="#5d5d5d" backgroundColor="#27b5b9bd" transparent="1" />
@@ -1257,7 +1257,7 @@ class memoryinfo(Screen):
 
 
 	def Title(self):
-		self.setTitle(_("Memory info"))
+		self.setTitle(_("Clear Memory"))
 		self.infomem()
 
 	def clear(self):
@@ -1287,6 +1287,8 @@ class memoryinfo(Screen):
 		
 	def exit(self):
 		self.close()
+
+
 		
 	
 
