@@ -55,7 +55,7 @@ typedef struct {
    u_char section_syntax_indicator               :1;
 #endif
    u_char section_length_lo                      :8;
-   u_char channel_id                             :8;
+   u_char mhw2_theme                             :8;
    union {
      u_char theme_id                             :8;
      u_char mhw2_hours                           :8;
