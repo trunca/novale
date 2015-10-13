@@ -54,10 +54,7 @@ typedef struct {
    u_char dummy                                  :1;
    u_char section_syntax_indicator               :1;
 #endif
-   union {
-	u_char section_length_lo                 :8;
-	u_char mhw2_theme			 :8;
-   };
+   u_char section_length_lo                      :8;
    u_char channel_id                             :8;
    union {
      u_char theme_id                             :8;
@@ -115,3 +112,4 @@ typedef struct mhw_summary {
 } mhw_summary_t;
 
 #endif
+
