@@ -174,6 +174,7 @@ class eEPGCache: public eMainloop, private eThread, public Object
 #endif
 #ifdef ENABLE_MHW_EPG
 		std::vector<mhw_channel_name_t> m_channels;
+		std::vector<mhw_channel_equiv_t> m_equiv;
 		std::map<uint8_t, mhw_theme_name_t> m_themes;
 		std::map<uint32_t, mhw_title_t> m_titles;
 		std::multimap<uint32_t, uint32_t> m_program_ids;
@@ -196,6 +197,11 @@ class eEPGCache: public eMainloop, private eThread, public Object
 		void timeMHW2DVB( int minutes, u_char *return_time);
 		void timeMHW2DVB( u_char day, u_char hours, u_char minutes, u_char *return_time);
 		void storeMHWTitle(std::map<uint32_t, mhw_title_t>::iterator itTitle, std::string sumText, const uint8_t *data);
+		void GetEquiv(void);
+		int nb_equiv;
+		bool log_open ();
+		void log_close();
+		void log_add (char *message, ...);
 #endif
 		void readData(const uint8_t *data, int source);
 		void startChannel();
