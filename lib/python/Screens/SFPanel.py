@@ -14,6 +14,7 @@ from os import environ
 import os
 import sys
 from Screens.MessageBox import MessageBox
+from Tools.Directories import fileExists
 from Components.config import config, getConfigListEntry, ConfigText, ConfigPassword, ConfigClock, ConfigIP, ConfigDateTime, ConfigSelection, ConfigSubsection, ConfigYesNo, configfile, NoSave
 from Components.Sources.StaticText import StaticText
 from enigma import eListboxPythonMultiContent, gFont, eEnv, getDesktop, pNavigation
@@ -155,6 +156,7 @@ class mainSFPanel(Screen):
 		self.sublist.append(SFSubMenuEntryComponent(_("Oscam suite"),_("Informacion oscam emu"),_('Acceda a toda la informacion de su emuladora oscam')))
 		self.sublist.append(SFSubMenuEntryComponent(_("Gbox suite"),_("Informacion Gbox emu"),_('Acceda a toda la informacion de su emuladora gbox o mbox')))
 		self.sublist.append(SFSubMenuEntryComponent(_("Install CCcam.cfg"),_("Install CCcam.cfg"),_('Instala CCcam.cfg desde Pendrive')))
+                self.sublist.append(SFSubMenuEntryComponent(_("Autocam"),_("Plugin Autocam"),_('Gestion de multicam')))
 		self["sublist"].l.setList(self.sublist)
 ######## Menu backup ##############################
 	def SFBackup(self):
@@ -215,12 +217,12 @@ class mainSFPanel(Screen):
 ######## Menu infopanel ##############################
 	def SFinfopanel(self):
 		self.sublist = []
-		self.sublist.append(SFSubMenuEntryComponent("Check memory",_("Check memory"),_("Check memory usage receptor")))
-		self.sublist.append(SFSubMenuEntryComponent("Proc information",_("Proc information"),_("Proc information receptor")))
+		self.sublist.append(SFSubMenuEntryComponent("Ip Receptor",_("Ip Receptor"),_("Ip red del receptor")))
 		self.sublist.append(SFSubMenuEntryComponent("Ecm information",_("Ecm information"),_("Ecm information for emu")))
 		self.sublist.append(SFSubMenuEntryComponent("Driver version",_("Driver version"),_("Driver version install receptor")))
 		self.sublist.append(SFSubMenuEntryComponent("Box uptime",_("Box uptime"),_("Box uptime receptor")))
 		self.sublist.append(SFSubMenuEntryComponent("Public IP",_("Public IP"),_("view Public IP")))
+		self.sublist.append(SFSubMenuEntryComponent("Mac Adress",_("Mac Adress"),_("view Mac Adress")))
 		self["sublist"].l.setList(self.sublist)
 ######## Menu SKIN ##############################
 	def SFskin(self):
@@ -290,6 +292,8 @@ class mainSFPanel(Screen):
             		self.session.open(gboxsuite.GboxSuiteMainMenu)
 		elif item[0] == _("Install CCcam.cfg"):
            	        self.cccam()
+		elif item[0] == _("Autocam"):
+           	        self.sfautocam()
 
 
 
@@ -361,7 +365,8 @@ class mainSFPanel(Screen):
             		import Cron
             		self.session.open(Cron.CronManager)
 		elif item[0] == _("Clean memory"):
-			self.clear()
+			import SFextra
+            		self.session.open(SFextra.memoryinfo)
 		elif item[0] == _("password changer"):
 			import Password
             		self.session.open(Password.PasswordChanger)
@@ -405,20 +410,19 @@ class mainSFPanel(Screen):
             		self.session.open(SFextra.wifipanel)
 
 ######## Seleccion infopanel ##############################
-		if item[0] == _("Check memory"):
-			import SFextra
-            		self.session.open(SFextra.memoryinfo)
-		elif item[0] == _("Proc information"):
-			self.session.open(SFConsole, title=_('Proc information'), cmdlist=['cat /proc/stb/info/boxtype & cat /proc/stb/info/gbmodel & cat /proc/stb/info/model & cat /proc/stb/info/chipset & cat /proc/stb/info/version'])
+		if item[0] == _("Ip Receptor"):
+			self.miip2()
 		elif item[0] == _("Ecm information"):
 			import SFextra
             		self.session.open(SFextra.SFecminfo)
 		elif item[0] == _("Driver version"):
-			self.session.open(SFConsole, title=_('Driver version'), cmdlist=['opkg list-installed | grep dvb-mod'])
+			self.driver()
 		elif item[0] == _("Box uptime"):
 			self.session.open(SFConsole, title=_('Box uptime'), cmdlist=['uptime'])
 		elif item[0] == _("Public IP"):
 			self.miip()
+		elif item[0] == _("Mac Adress"):
+			self.mac()
 
 ######## Seleccion skin ##############################
 		if item[0] == _("weather"):
@@ -485,14 +489,7 @@ class mainSFPanel(Screen):
 
 #############software utilidades################################
 
-	def clear(self):
-		os.system("sync ; echo 3 > /proc/sys/vm/drop_caches")
-		os.system("free | awk '/Mem:/ {print int(100*$3/$2) ;}' >/tmp/.memory")
-		f = open("/tmp/.memory")
-		mused = f.readline()
-		f.close()
-		self.mbox = self.session.open(MessageBox,_("Used memory after execution: %s ") % (mused), MessageBox.TYPE_INFO, timeout = 20 )
-
+	
 	def passreset(self):
 		os.system("passwd -d root")
 		self.mbox = self.session.open(MessageBox,_("your password has been deleted"), MessageBox.TYPE_INFO, timeout = 10 )
@@ -500,11 +497,32 @@ class mainSFPanel(Screen):
                 os.system("opkg update")
                 self.mbox = self.session.open(MessageBox,_("Lista feed actualizada"), MessageBox.TYPE_INFO, timeout = 10 )
         def cccam(self):
-		if os.path.isfile("/media/usb/hola.cfg"):
-                	os.system("cp /media/usb/hola.cfg /etc/")
+		if os.path.isfile("/media/usb/CCcam.cfg"):
+                	os.system("cp /media/usb/CCcam.cfg /etc/")
                 	self.mbox = self.session.open(MessageBox,_("CCcam.cfg instalado correctamente"), MessageBox.TYPE_INFO, timeout = 10 )
 		else:
 			self.mbox = self.session.open(MessageBox,_("No existe archivo CCcam.cfg en /media/usb"), MessageBox.TYPE_INFO, timeout = 10 )
+
+        def sfautocam(self):
+		if os.popen("opkg list-installed | grep enigma2-plugin-systemplugins-autocamsetup").read() == '':
+                	self.session.openWithCallback(self.insautocam,MessageBox,_("Estas seguro que quieres instalar autocam"), MessageBox.TYPE_YESNO)
+		else:
+			from Plugins.SystemPlugins.AutoCamSetup.Camsetup import *
+			self.session.open(CamsetupSelection)
+
+	def insautocam(self, answer):
+		if answer is True:
+			os.system("opkg install enigma2-plugin-systemplugins-autocamsetup")
+			self.testautocam()
+
+	def testautocam(self):
+			
+		if fileExists('/usr/lib/enigma2/python/Plugins/SystemPlugins/AutoCamSetup/autocam.py'):
+	    		self.mbox = self.session.open(MessageBox,_("Autocam has been install"), MessageBox.TYPE_INFO, timeout = 10 )
+		else:
+			self.mbox = self.session.open(MessageBox,_("Error autocam no se ha instalado"), MessageBox.TYPE_INFO, timeout = 10 )
+			
+
 
 #############software infopanel################################
 
@@ -514,6 +532,20 @@ class mainSFPanel(Screen):
 		mostrarip = f.readline()
 		f.close()
 		self.mbox = self.session.open(MessageBox,_("public your ip is: %s") % (mostrarip), MessageBox.TYPE_INFO, timeout = 10 )
+
+    	def miip2(self):
+		mostrarip2 = os.popen("ifconfig eth0 | grep 'inet addr' | cut -d: -f2 | awk '{ print $1}'").read()
+		self.mbox = self.session.open(MessageBox,_("Ip Receptor is: %s") % (mostrarip2), MessageBox.TYPE_INFO, timeout = 10 )
+
+   	def mac(self):
+		mostrarmac = os.popen("cat /sys/class/net/eth?/address").read()
+		self.mbox = self.session.open(MessageBox,_("Mac Adress is: %s") % (mostrarmac), MessageBox.TYPE_INFO, timeout = 10 )
+
+   	def driver(self):
+		mostrardriver = os.popen("opkg list-installed | grep dvb-mod").read()
+		self.mbox = self.session.open(MessageBox,_("Driver install is: %s") % (mostrardriver), MessageBox.TYPE_INFO, timeout = 10 )
+
+
 ######## creacion menu lista #######################
 def SFMenuEntryComponent(name, description, long_description = None, width=540):
 	pngname = name.replace(" ","_") 
@@ -582,6 +614,3 @@ class SFMenuSubList(MenuList):
 			self.l.setFont(1, gFont("Regular", 14))
 			self.l.setItemHeight(50)
 		
-
-
-
