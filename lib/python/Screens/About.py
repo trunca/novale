@@ -215,5 +215,3 @@ class CommitInfo(Screen):
 	def right(self):
 		self.project = self.project != len(self.projects) - 1 and self.project + 1 or 0
 		self.updateCommitLogs()
-
-
