@@ -1229,6 +1229,10 @@ class memoryinfo(Screen):
     <ePixmap pixmap="SF_HD/border_sf.png" position="125,165" zPosition="-1" size="620,420" transparent="1" alphatest="blend" />
     <ePixmap pixmap="SF_HD/buttons/red.png" position="45,98" size="25,25" alphatest="blend" />
     <ePixmap pixmap="SF_HD/buttons/green.png" position="240,98" size="25,25" alphatest="blend" />
+    <ePixmap pixmap="SF_HD/buttons/yellow.png" position="435,98" size="25,25" alphatest="blend" />
+    <ePixmap pixmap="SF_HD/buttons/blue.png" position="625,98" size="25,25" alphatest="blend" />
+  <widget source="key_yellow" render="Label" position="473,101" zPosition="1" size="150,25" font="Regular;20" halign="center" valign="center" backgroundColor="darkgrey" foregroundColor="foreground" transparent="1" />
+    <widget source="key_blue" render="Label" position="653,101" zPosition="1" size="150,25" font="Regular;20" halign="center" valign="center" backgroundColor="darkgrey" foregroundColor="foreground" transparent="1" />
     <widget source="key_green" render="Label" position="278,101" zPosition="1" size="150,25" font="Regular;20" halign="center" valign="center" backgroundColor="darkgrey" foregroundColor="foreground" transparent="1" />
     <widget source="key_red" render="Label" position="86,101" zPosition="1" size="150,25" font="Regular;20" halign="center" valign="center" backgroundColor="darkgrey" foregroundColor="foreground" transparent="1" />
 <widget source="MemoryLabel" render="Label" position="161,200" size="150,22" font="Regular; 26" halign="right" foregroundColor="black" backgroundColor="#a7a7a7" valign="center" transparent="1" />
@@ -1246,6 +1250,8 @@ class memoryinfo(Screen):
 		self["shortcuts"] = ActionMap(["ShortcutActions", "WizardActions"],
 		{
 			"green": self.clear,
+			"blue": self.cron,
+			"yellow": self.removecron,
 			"cancel": self.exit,
 			"back": self.exit,
 			"red": self.exit,
@@ -1253,6 +1259,8 @@ class memoryinfo(Screen):
 			})
 		self["key_red"] = StaticText(_("Close"))
 		self["key_green"] = StaticText(_("free memory"))
+		self["key_blue"] = StaticText(_("add cron"))
+		self["key_yellow"] = StaticText(_("remove cron"))
                 self.onShow.append(self.Title)
 
 
@@ -1264,7 +1272,18 @@ class memoryinfo(Screen):
 		os.system("sync ; echo 3 > /proc/sys/vm/drop_caches")
 		self.mbox = self.session.open(MessageBox,(_("memoria liberada")), MessageBox.TYPE_INFO, timeout = 4 )
 		self.infomem()
-		
+
+	def cron(self):
+		if fileExists('/etc/cron/crontabs/root'):
+			os.system("sed -i '/drop_caches/d' /etc/cron/crontabs/root")
+			os.system("echo '0 0-23/2 * * * sync; echo 3 > /proc/sys/vm/drop_caches' >> /etc/cron/crontabs/root")
+			self.mbox = self.session.open(MessageBox,(_(" Add drop_caches for cron")), MessageBox.TYPE_INFO, timeout = 4 )
+		else:
+			self.mbox = self.session.open(MessageBox,(_(" No existe archivo root en /etc/crontabs")), MessageBox.TYPE_INFO, timeout = 4 )
+			
+	def removecron(self):
+		os.system("sed -i '/drop_caches/d' /etc/cron/crontabs/root")	
+		self.mbox = self.session.open(MessageBox,(_("Remove drop_caches for cron ")), MessageBox.TYPE_INFO, timeout = 4 )
 
 	def infomem(self):
 		memtotal = memfree = buffers = cached = ''
