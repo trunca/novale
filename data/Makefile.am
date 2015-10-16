@@ -22,9 +22,7 @@ else
 dist_pkgdata_DATA += startwizard.xml
 endif
 
-if HAVE_TEXTLCD
-dist_pkgdata_DATA += skin_text.xml
-endif
+
 
 if HAVE_COLORLCD220
 SUBDIRS += lcd220 lcd_skin220
