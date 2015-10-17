@@ -1,4 +1,4 @@
-
+SUBDIRS =  skins images
 
 installdir = $(pkglibdir)/python/Screens
 
