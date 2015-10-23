@@ -1,5 +1,3 @@
-SUBDIRS = images
-
 installdir = $(pkglibdir)/python/Screens
 
 install_PYTHON = \
