@@ -1,4 +1,3 @@
-
 from Screen import Screen
 from Components.config import config
 from Components.ActionMap import ActionMap
