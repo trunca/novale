@@ -13,19 +13,19 @@ def getMachineName():
     return "spycat"
 
 def getMachineMtdKernel():
-    return "mtd2"
+    return "mtd0"
 
 def getMachineKernelFile():
     return "kernel.bin"
 
 def getMachineMtdRoot():
-    return "mtd0"
+    return "mtd2"
 
 def getMachineRootFile():
     return "rootfs.bin"
 
 def getMachineMKUBIFS():
-    return "-m 2048 -e 126976 -c 4096"
+    return "-m 2048 -e 126976 -c 4096 -F"
 
 def getMachineUBINIZE():
     return "-m 2048 -p 128KiB"
