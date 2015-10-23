@@ -1236,6 +1236,7 @@ class memoryinfo(Screen):
     <widget source="key_green" render="Label" position="278,101" zPosition="1" size="150,25" font="Regular;20" halign="center" valign="center" backgroundColor="darkgrey" foregroundColor="foreground" transparent="1" />
     <widget source="key_red" render="Label" position="86,101" zPosition="1" size="150,25" font="Regular;20" halign="center" valign="center" backgroundColor="darkgrey" foregroundColor="foreground" transparent="1" />
 <widget source="MemoryLabel" render="Label" position="161,200" size="150,22" font="Regular; 26" halign="right" foregroundColor="black" backgroundColor="#a7a7a7" valign="center" transparent="1" />
+<widget source="root" render="Label" position="105,590" size="600,22" zPosition="3" font="Regular; 20" halign="right" foregroundColor="#5d5d5d" backgroundColor="#a7a7a7" valign="center" transparent="1" />
 	<widget source="memTotal" render="Label" position="161,242" zPosition="2" size="450,22" font="Regular;20" halign="left" valign="center" backgroundColor="#a7a7a7" foregroundColor="blue" transparent="1" />
 	<widget source="bufCache" render="Label" position="161,269" zPosition="2" size="450,22" font="Regular;20" halign="left" valign="center" backgroundColor="#a7a7a7" foregroundColor="white" transparent="1" />
 <ePixmap pixmap="SF_HD/liberar_ram.png" zPosition="-1" position="300,290" size="300,300" alphatest="on" />
@@ -1247,7 +1248,8 @@ class memoryinfo(Screen):
 		self["memTotal"] = StaticText()
 		self["bufCache"] = StaticText()
 		self["MemoryLabel"] = StaticText(_("Memory:"))
-		self["shortcuts"] = ActionMap(["ShortcutActions", "WizardActions"],
+		self["root"] = StaticText(_("Pulse tecla UP para crear root en caso no existir archivo en crontabs"))
+		self["shortcuts"] = ActionMap(["ShortcutActions", "WizardActions", "DirectionActions"],
 		{
 			"green": self.clear,
 			"blue": self.cron,
@@ -1256,6 +1258,8 @@ class memoryinfo(Screen):
 			"back": self.exit,
 			"red": self.exit,
 			"ok": self.exit,
+			"up": self.crearroot,
+			
 			})
 		self["key_red"] = StaticText(_("Close"))
 		self["key_green"] = StaticText(_("free memory"))
@@ -1268,6 +1272,13 @@ class memoryinfo(Screen):
 		self.setTitle(_("Clear Memory"))
 		self.infomem()
 
+	def crearroot(self):
+		if fileExists('/etc/cron/crontabs/root'):
+			self.mbox = self.session.open(MessageBox,(_("ya existe archivo root")), MessageBox.TYPE_INFO, timeout = 4 )
+		else:
+			os.system("touch /var/spool/cron/crontabs/root")
+			self.mbox = self.session.open(MessageBox,(_("create archivo root")), MessageBox.TYPE_INFO, timeout = 4 )
+	
 	def clear(self):
 		os.system("sync ; echo 3 > /proc/sys/vm/drop_caches")
 		self.mbox = self.session.open(MessageBox,(_("memoria liberada")), MessageBox.TYPE_INFO, timeout = 4 )
