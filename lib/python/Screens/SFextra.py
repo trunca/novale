@@ -1317,9 +1317,4 @@ class memoryinfo(Screen):
 		
 	def exit(self):
 		self.close()
-
-
 		
-	
-
-
