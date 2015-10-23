@@ -31,13 +31,13 @@ class HardwareInfo:
 
 		# Name ... bit odd, but history prevails
 		try:
-			self.device_name = open("/proc/stb/info/model").read().strip()
+			self.device_name = open("/etc/hostname").read().strip()
 		except:
 			pass
 
 		# Model
 		try:
-			self.device_model = open("/proc/stb/info/model").read().strip()
+			self.device_model = open("/etc/hostname").read().strip()
 		except:
 			pass
 			
