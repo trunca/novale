@@ -1,3 +1,4 @@
+
 from Screen import Screen
 from Components.config import config
 from Components.ActionMap import ActionMap
@@ -7,6 +8,7 @@ from Components.NimManager import nimmanager
 from Components.About import about
 from Components.ScrollLabel import ScrollLabel
 from Components.Button import Button
+from Components.Pixmap import Pixmap, MultiPixmap
 
 from Components.Label import Label
 from Components.ProgressBar import ProgressBar
@@ -17,6 +19,8 @@ from enigma import eTimer, eLabel
 from Components.HTMLComponent import HTMLComponent
 from Components.GUIComponent import GUIComponent
 import skin
+from os import system, remove
+from Tools.Directories import pathExists, fileExists, resolveFilename, SCOPE_PLUGINS, SCOPE_CURRENT_PLUGIN, SCOPE_CURRENT_SKIN, SCOPE_METADIR
 
 class About(Screen):
 	def __init__(self, session):
@@ -86,6 +90,7 @@ class About(Screen):
 		self["hddA"] = StaticText(hddinfo)
 		AboutText += hddinfo
 		self["AboutScrollLabel"] = ScrollLabel(AboutText)
+		self["key_blue"] = Button(_("System Info"))
 		self["key_green"] = Button(_("Translations"))
 		self["key_red"] = Button(_("Latest Commits"))
 		
@@ -95,12 +100,16 @@ class About(Screen):
 				"ok": self.close,
 				"red": self.showCommits,
 				"green": self.showTranslationInfo,
+				"blue": self.showsysteminfo,
 				"up": self["AboutScrollLabel"].pageUp,
 				"down": self["AboutScrollLabel"].pageDown
 			})
 
 	def showTranslationInfo(self):
 		self.session.open(TranslationInfo)
+
+	def showsysteminfo(self):
+		self.session.open(SFinfo)
 
 	def showCommits(self):
 		self.session.open(CommitInfo)
@@ -201,7 +210,7 @@ class CommitInfo(Screen):
 			commitlog = _("Currently the commit log cannot be retrieved - please try later again")
 		self["AboutScrollLabel"].setText(commitlog)
 
-	def updateCommitLogs(self):
+        def updateCommitLogs(self):
 		if self.cachedProjects.has_key(self.projects[self.project][1]):
 			self["AboutScrollLabel"].setText(self.cachedProjects[self.projects[self.project][1]])
 		else:
@@ -215,3 +224,134 @@ class CommitInfo(Screen):
 	def right(self):
 		self.project = self.project != len(self.projects) - 1 and self.project + 1 or 0
 		self.updateCommitLogs()
+
+class SFinfo(Screen):
+    skin = """
+        <screen position="250,100" size="650,550" title="System Info">
+          <eLabel backgroundColor="blue" position="100,120" size="500,2" zPosition="2" />	
+          <eLabel font="Regular;29" position="150,80" size="435,38" text="System Info" transparent="1" zPosition="2" />	
+          <ePixmap alphatest="blend" pixmap="/usr/share/enigma2/SF_HD/sfmenu/syteminfo/dev_flash.png" position="155,157" size="60,60" />
+          <widget source="session.Event_Now" render="Progress" pixmap="/usr/share/enigma2/SF_HD/sfmenu/syteminfo/device.png" position="230,165" size="100,15" transparent="1" borderWidth="1" borderColor="grey" zPosition="1">
+           <convert type="barraprogreso">FleshInfo</convert>
+          </widget>
+          <widget source="session.CurrentService" render="Label" position="230,190" size="475,40" zPosition="1" font="Regular; 16" halign="left" valign="center" transparent="1" noWrap="0">
+            <convert type="barraprogreso">FleshInfo,Full</convert>
+           </widget>
+           <widget source="session.CurrentService" render="Label" position="334,235" size="70,15" zPosition="1" font="Regular; 14" halign="left" valign="center" transparent="1" noWrap="0">
+            <convert type="barraprogreso">HddTemp</convert>
+           </widget>
+           <ePixmap alphatest="blend" pixmap="/usr/share/enigma2/SF_HD/sfmenu/syteminfo/dev_hdd.png" position="155,227" size="60,60" />
+           <widget source="session.Event_Now" render="Progress" pixmap="/usr/share/enigma2/SF_HD/sfmenu/syteminfo/device.png" position="230,235" size="100,15" transparent="1" borderWidth="1" borderColor="grey" zPosition="1">
+           <convert type="barraprogreso">HddInfo</convert>
+          </widget>
+          <widget source="session.CurrentService" render="Label" position="230,260" size="475,40" zPosition="1" font="Regular; 16" halign="left" valign="center" transparent="1" noWrap="0">
+           <convert type="barraprogreso">HddInfo,Full</convert>
+          </widget>
+          <ePixmap alphatest="blend" pixmap="/usr/share/enigma2/SF_HD/sfmenu/syteminfo/dev_usb.png" position="155,297" size="60,60" />
+          <widget source="session.Event_Now" render="Progress" pixmap="/usr/share/enigma2/SF_HD/sfmenu/syteminfo/device.png" position="230,305" size="100,15" transparent="1" borderWidth="1" borderColor="grey" zPosition="1">
+           <convert type="barraprogreso">UsbInfo</convert>
+          </widget>
+          <widget source="session.CurrentService" render="Label" position="230,330" size="475,40" zPosition="1" font="Regular; 16" halign="left" valign="center" transparent="1" noWrap="0">
+            <convert type="barraprogreso">UsbInfo,Full</convert>
+          </widget>
+          <ePixmap alphatest="blend" pixmap="/usr/share/enigma2/SF_HD/sfmenu/syteminfo/dev_ram.png" position="155,367" size="60,60" />
+          <widget source="session.Event_Now" render="Progress" pixmap="/usr/share/enigma2/SF_HD/sfmenu/syteminfo/device.png" position="230,375" size="100,15" transparent="1" borderWidth="1" borderColor="grey" zPosition="1">
+           <convert type="barraprogreso">MemTotal</convert>
+          </widget>
+          <widget source="session.CurrentService" render="Label" position="230,400" size="475,40" zPosition="1" font="Regular; 16" halign="left" valign="center" transparent="1" noWrap="0">
+           <convert type="barraprogreso">MemTotal,Full</convert>
+          </widget>
+          <widget source="session.Event_Now" render="Progress" pixmap="/usr/share/enigma2/SF_HD/sfmenu/syteminfo/device.png" position="230,445" size="100,15" transparent="1" borderWidth="1" borderColor="grey" zPosition="1">
+           <convert type="barraprogreso">SwapTotal</convert>
+          </widget>
+          <widget source="session.CurrentService" render="Label" position="230,470" size="475,40" zPosition="1" font="Regular; 16" halign="left" valign="center" transparent="1" noWrap="0">
+           <convert type="barraprogreso">SwapTotal,Full</convert>
+          </widget>
+          <ePixmap alphatest="blend" pixmap="/usr/share/enigma2/SF_HD/sfmenu/syteminfo/dev_swap.png" position="155,437" size="60,60" />
+	  <widget name="telnet_on" position="226,585" size="40,80" pixmap="/usr/share/enigma2/SF_HD/sfmenu/syteminfo/dev_ram.png" zPosition="2" alphatest="on" />
+        </screen>"""
+
+    def __init__(self, session, args = 0):
+        self.skin = SFinfo.skin
+        self.session = session
+	Screen.__init__(self, session)
+	self["actions"] = ActionMap(["SetupActions", "ColorActions", "DirectionActions"], 
+			{
+				"cancel": self.close,
+				"ok": self.close,
+			})	
+	self["key_red"] = Button(_("Cancel"))	
+	self['ssh_on'] = Pixmap()
+	self['ssh_on'].hide()
+	self['telnet_on'] = Pixmap()
+	self['telnet_on'].hide()
+	self['ftp_on'] = Pixmap()
+	self['ftp_on'].hide()
+	self['smb_on'] = Pixmap()
+	self['smb_on'].hide()
+	self['nfs_on'] = Pixmap()
+	self['nfs_on'].hide()
+	self.onLayoutFinish.append(self.updateList)
+
+    def updateList(self):
+        self.getServicesInfo()
+  
+
+    def getServicesInfo(self):
+        assh = False
+        atelnet = False
+        aftp = False
+        avpn = False
+        asamba = False
+        anfs = False
+        rc = system('ps > /tmp/nvpn.tmp')
+        if fileExists('/etc/inetd.conf'):
+            f = open('/etc/inetd.conf', 'r')
+            for line in f.readlines():
+                parts = line.strip().split()
+                if parts[0] == 'telnet':
+                    atelnet = True
+                if parts[0] == 'ftp':
+                    aftp = True
+
+            f.close()
+        if fileExists('/tmp/nvpn.tmp'):
+            f = open('/tmp/nvpn.tmp', 'r')
+            for line in f.readlines():
+                if line.find('/usr/sbin/openvpn') != -1:
+                    avpn = True
+                if line.find('/usr/sbin/dropbear') != -1:
+                    assh = True
+                if line.find('smbd') != -1:
+                    asamba = True
+                if line.find('/usr/sbin/rpc.mountd') != -1:
+                    anfs = True
+
+            f.close()
+            remove('/tmp/nvpn.tmp')
+        if assh == True:
+            self['ssh_on'].show()
+        else:
+            self['ssh_on'].hide()
+        if atelnet == True:
+            self['telnet_on'].show()
+        else:
+            self['telnet_on'].hide()
+        if aftp == True:
+            self['ftp_on'].show()
+        else:
+            self['ftp_on'].hide()
+        if asamba == True:
+            self['smb_on'].show()
+        else:
+            self['smb_on'].hide()
+        if anfs == True:
+            self['nfs_on'].show()
+        else:
+            self['nfs_on'].hide()
+
+
+
+def startinfo(session, **kwargs):
+        session.open(SFinfo)  
+
