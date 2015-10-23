@@ -33,8 +33,8 @@ if distro.lower() == "sfteam":
 elif distro.lower() == "sfteambeta":
 	image = 0
 
-feedurl_sft = 'http://feeds.soldiersat.eu/sfteam-4/images'
-feedurl_sft2 = 'http://feeds.soldiersat.eu/sfteam-4/images/beta'
+feedurl_sft = 'https://releases.soldiersat.eu/4.2.1'
+feedurl_sft2 = 'https://releases.soldiersat.eu/4.2.1'
 imagePath = '/media/usb/images'
 flashPath = '/media/usb/images/flash'
 flashTmp = '/media/usb/images/tmp'
@@ -503,16 +503,16 @@ class doFlashImage(Screen):
 	def layoutFinished(self):
 		box = self.box()
 		self.imagelist = []
-		if self.Online:
-			
-			self["key_yellow"].setText("Backup&Flash")
 
-			url = '%s/index.php?open=%s' % (self.feedurl,box)
+		if self.Online:
+			self["key_yellow"].setText("Backup&Flash")
+			
+			url = '%s/%s' % (self.feedurl,box)
 			try:
 				req = urllib2.Request(url)
 				if self.newfeed:
 					self.feedurl = self.newfeed[0][:-1]
-					url = '%s/index.php?open=%s' % (self.feedurl,box)
+					url = '%s/%s' % (self.feedurl,box)
 					authinfo = urllib2.HTTPPasswordMgrWithDefaultRealm()
 					authinfo.add_password(None, self.feedurl, self.newfeed[1][:-1], self.newfeed[2][:-1])
 					handler = urllib2.HTTPBasicAuthHandler(authinfo)
@@ -536,12 +536,10 @@ class doFlashImage(Screen):
 			lines = the_page.split('\n')
 			tt = len(box)
 			for line in lines:
-				if line.find("<a href='%s/" % box) > -1:
-					t = line.find("<a href='%s/" % box)
-					if self.feed == "sft2" or self.feed == "sft2":
-						self.imagelist.append(line[t+tt+10:t+tt+tt+39])
-					else:
-						self.imagelist.append(line[t+tt+10:t+tt+tt+35])
+				if line.find("<tr><td valign=\"top\"><a href=\"") > -1:
+					t1 = line.find("<tr><td valign=\"top\"><a href=\"")
+					t2 = line.find(".zip")
+					self.imagelist.append(line[t1+30:t2+4])
 		else:
 			self["key_blue"].setText(_("Delete"))
 			self["key_yellow"].setText(_("Devices"))
@@ -938,20 +936,13 @@ class doFlashImageLocal(Screen):
 		if self.Online:
 			
 			self["key_yellow"].setText("Backup&Flash")
-			if image == 1:
-				if self.feed == "sftbeta":
-					self.feedurl = feedurl_sft2
-					self["key_blue"].setText("Stable")
-				else:
-					self.feedurl = feedurl_sft
-					self["key_blue"].setText("Beta")
-
-			url = '%s/index.php?open=%s' % (self.feedurl,box)
+			
+			url = '%s/%s' % (self.feedurl,box)
 			try:
 				req = urllib2.Request(url)
 				if self.newfeed:
 					self.feedurl = self.newfeed[0][:-1]
-					url = '%s/index.php?open=%s' % (self.feedurl,box)
+					url = '%s/%s' % (self.feedurl,box)
 					authinfo = urllib2.HTTPPasswordMgrWithDefaultRealm()
 					authinfo.add_password(None, self.feedurl, self.newfeed[1][:-1], self.newfeed[2][:-1])
 					handler = urllib2.HTTPBasicAuthHandler(authinfo)
@@ -975,12 +966,10 @@ class doFlashImageLocal(Screen):
 			lines = the_page.split('\n')
 			tt = len(box)
 			for line in lines:
-				if line.find("<a href='%s/" % box) > -1:
-					t = line.find("<a href='%s/" % box)
-					if self.feed == "sft2" or self.feed == "sft2":
-						self.imagelist.append(line[t+tt+10:t+tt+tt+39])
-					else:
-						self.imagelist.append(line[t+tt+10:t+tt+tt+35])
+				if line.find("<tr><td valign=\"top\"><a href=\"") > -1:
+					t1 = line.find("<tr><td valign=\"top\"><a href=\"")
+					t2 = line.find(".zip")
+					self.imagelist.append(line[t+30:t2+4])
 		else:
 			self["key_blue"].setText(_("Delete"))
 			self["key_yellow"].setText(_("Devices"))
