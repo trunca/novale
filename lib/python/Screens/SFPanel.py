@@ -137,7 +137,6 @@ class mainSFPanel(Screen):
 		self.list = []
 		self.oldlist = []
 		self.list.append(SFMenuEntryComponent("Softcam",_("Start/stop/select cam"),_("Start/stop/select your cam, You need to install first a softcam")))
-		self.list.append(SFMenuEntryComponent("Backup",_("Realizar backup de tu receptor"),_("Realizar backup de tu receptor en unidad montada HDD o USB")))
 		self.list.append(SFMenuEntryComponent("Software Manager",_("Actualizar, instalar tu receptor"),_("Actualizar, flashear on line, instalar paquetes en tu receptor")))
 		self.list.append(SFMenuEntryComponent("EPG",_("Actualizar EPG"),_("Actualizar lista de eventos epg de nuestro receptor")))
 		self.list.append(SFMenuEntryComponent("Utilities",_("utilities receptor"),_("Utilidades varias para nuestro receptor")))
@@ -157,12 +156,6 @@ class mainSFPanel(Screen):
 		self.sublist.append(SFSubMenuEntryComponent(_("Gbox suite"),_("Informacion Gbox emu"),_('Acceda a toda la informacion de su emuladora gbox o mbox')))
 		self.sublist.append(SFSubMenuEntryComponent(_("Install CCcam.cfg"),_("Install CCcam.cfg"),_('Instala CCcam.cfg desde Pendrive')))
                 self.sublist.append(SFSubMenuEntryComponent(_("Autocam"),_("Plugin Autocam"),_('Gestion de multicam')))
-		self["sublist"].l.setList(self.sublist)
-######## Menu backup ##############################
-	def SFBackup(self):
-		self.sublist = []
-		self.sublist.append(SFSubMenuEntryComponent("Backup HDD",_("Realizar backup hdd"),_("Realize copia de seguridad de su imagen en unidad HDD")))
-		self.sublist.append(SFSubMenuEntryComponent(_("Backup USB"),_("Realizar backup usb"),_('Realize copia de seguridad de su imagen en unidad USB')))
 		self["sublist"].l.setList(self.sublist)
 ######## Menu sofware manager ##############################
 	def SFSoftwareManager(self):
@@ -189,6 +182,7 @@ class mainSFPanel(Screen):
 	def SFUtilities(self):
 		self.sublist = []
 		self.sublist.append(SFSubMenuEntryComponent("Mount Manager",_("Montar unidades"),_("Monte sus unidades hdd, usb, en su receptor")))
+		self.sublist.append(SFSubMenuEntryComponent("Full Backup",_("Full Backup"),_("Realizar copia completa de la imagen")))
 		self.sublist.append(SFSubMenuEntryComponent("Cron Manager",_("Cron Manager"),_("Configure la ejecucion de procesos")))
 		self.sublist.append(SFSubMenuEntryComponent("Clean memory",_("libere memoria"),_("Pulse para libearia memoria ram de su receptor")))
 		self.sublist.append(SFSubMenuEntryComponent("password changer",_("Cambiar password"),_("Cambie el pasword root de su receptor")))
@@ -247,8 +241,6 @@ class mainSFPanel(Screen):
 ######## Select sofcam ##############################
 		if item[0] == _("Softcam"):
 			self.SFsoftcam()
-		elif item[0] == _("Backup"):
-			self.SFBackup()
 		elif item[0] == _("Software Manager"):
 			self.SFSoftwareManager()
 		elif item[0] == _("EPG"):
@@ -295,15 +287,6 @@ class mainSFPanel(Screen):
 		elif item[0] == _("Autocam"):
            	        self.sfautocam()
 
-
-
-######## Seleccion backup menu ##############################
-		if item[0] == _("Backup HDD"):
-			import Backup
-			self.session.open(Backup.BackupPanelhdd)
-		elif item[0] == _("Backup USB"):
-			import Backup
-			self.session.open(Backup.BackupPanel)
 ######## Seleccion sofware manager ##############################
 		if item[0] == _("Flash online"):
 			from Flash import FlashOnline
@@ -361,6 +344,9 @@ class mainSFPanel(Screen):
 		if item[0] == _("Mount Manager"):
 			import Mount
            		self.session.open(Mount.HddMount)
+		elif item[0] == _("Full Backup"):
+ 			import fullbackup
+			self.session.open(fullbackup.ImageBackup)
 		elif item[0] == _("Cron Manager"):
             		import Cron
             		self.session.open(Cron.CronManager)
@@ -614,3 +600,4 @@ class SFMenuSubList(MenuList):
 			self.l.setFont(1, gFont("Regular", 14))
 			self.l.setItemHeight(50)
 		
+
