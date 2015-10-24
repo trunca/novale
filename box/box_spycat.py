@@ -34,16 +34,16 @@ def getBoxType():
     return "spycat"
 
 def getBrandOEM():
-    return "spicat"
+    return "spycat"
 
 def getOEVersion():
     return "OE-SFteam 2.0"
 
 def getDriverDate():
-    return "20150610"
+    return "20151014"
 
 def getImageVersion():
-    return "4.1.3"
+    return "4.2.1"
 
 def getImageBuild():
     return "1"
@@ -52,7 +52,8 @@ def getImageDistro():
     return "sfteam"
 
 def getImageFolder():
-    return spycat"
+    return "spycat"
 
 def getImageFileSystem():
     return "ubi"
+
