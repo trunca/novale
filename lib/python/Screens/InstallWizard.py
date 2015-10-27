@@ -6,6 +6,7 @@ from Components.config import config, ConfigSubsection, ConfigBoolean, getConfig
 from Components.Network import iNetwork
 from Components.Ipkg import IpkgComponent
 from enigma import eDVBDB
+from Screens.MessageBox import MessageBox
 
 config.misc.installwizard = ConfigSubsection()
 config.misc.installwizard.hasnetwork = ConfigBoolean(default = False)
@@ -170,7 +171,12 @@ class InstallWizard(Screen, ConfigListScreen):
 			self.session.open(InstallWizardIpkgUpdater, self.index, _('Please wait (downloading cardserver)'), IpkgComponent.CMD_INSTALL, {'package': 'enigma2-plugin-cardserver-' + self.cardserver_type.value})
 
 		elif self.index == self.STATE_CHOISE_MBOOT and self.enabled.value:
-			self.session.open(InstallWizardIpkgUpdater, self.index, _('Please wait (downloading multiboot)'), IpkgComponent.CMD_INSTALL, {'package': 'enigma2-plugin-extensions-' + self.cache_type.value})
+			negativo = open('/etc/hostname').readlines()
+			for line in negativo:
+				if 'spycat' in line: 
+					self.mbox = self.session.open(MessageBox,_("meobot no disponible para spycat de momento"), MessageBox.TYPE_INFO, timeout = 10 )
+				else:
+					self.session.open(InstallWizardIpkgUpdater, self.index, _('Please wait (downloading multiboot)'), IpkgComponent.CMD_INSTALL, {'package': 'enigma2-plugin-extensions-' + self.cache_type.value})
 
 		elif self.index == self.STATE_CHOISE_HBBTV and self.enabled.value:
 			self.session.open(InstallWizardIpkgUpdater, self.index, _('Please wait (downloading hbbtv)'), IpkgComponent.CMD_INSTALL, {'package': 'hbbtv-' + self.hbbtv_type.value})
