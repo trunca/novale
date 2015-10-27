@@ -293,7 +293,6 @@ Makefile
 data/Makefile
 data/fonts/Makefile
 data/countries/Makefile
-data/displaytext/Makefile
 data/extensions/Makefile
 data/gbipbox/Makefile
 data/keymaps/Makefile
