@@ -344,7 +344,6 @@ class testcam(Screen):
     def __init__(self, session):
 	Screen.__init__(self, session)
         Screen.setTitle(self, _('Test Cam'))
-        self['lab1'] = Label(_('Autostart:'))
         self['labactive'] = Label(_(_('Active')))
         self['labdisabled'] = Label(_(_('Disabled')))
         self['lab2'] = Label(_('Current Status:'))
@@ -355,13 +354,11 @@ class testcam(Screen):
         self.my_cam_run = False
         self['key_red'] = Label(_('ver log'))
         self['key_yellow'] = Label(_('Start'))
-        self['key_blue'] = Label(_('Autostart'))
         self.list = []
         self['list'] = List(self.list)
         self['actions'] = ActionMap(['WizardActions', 'ColorActions', 'MenuActions'], {'back': self.close,
          'red': self.verlog,
-         'yellow': self.camStart,
-         'blue': self.autostart})
+         'yellow': self.camStart})
         self.onLayoutFinish.append(self.updateList)
 
     def camStart(self):
@@ -376,55 +373,13 @@ class testcam(Screen):
             sleep(3)
             self.updateList()
 
-    def autostart(self):
-        if path.exists('/etc/rc0.d/K20emutest'):
-            unlink('/etc/rc0.d/K20emutest')
-        else:
-            symlink('/etc/init.d/emutest', '/etc/rc0.d/K20emutest')
-        if path.exists('/etc/rc1.d/K20emutest'):
-            unlink('/etc/rc1.d/K20emutest')
-        else:
-            symlink('/etc/init.d/emutest', '/etc/rc1.d/K20emutest')
-        if path.exists('/etc/rc2.d/S20emutest'):
-            unlink('/etc/rc2.d/S20emutest')
-        else:
-            symlink('/etc/init.d/emutest', '/etc/rc2.d/S20emutest')
-        if path.exists('/etc/rc3.d/S20emutest'):
-            unlink('/etc/rc3.d/S20emutest')
-        else:
-            symlink('/etc/init.d/emutest', '/etc/rc3.d/S20emutest')
-        if path.exists('/etc/rc4.d/S20emutest'):
-            unlink('/etc/rc4.d/S20emutest')
-        else:
-            symlink('/etc/init.d/emutest', '/etc/rc4.d/S20emutest')
-        if path.exists('/etc/rc5.d/S20emutest'):
-            unlink('/etc/rc5.d/S20emutest')
-        else:
-            symlink('/etc/init.d/emutest', '/etc/rc5.d/S20emutest')
-        if path.exists('/etc/rc6.d/K20emutest'):
-            unlink('/etc/rc6.d/K20emutest')
-        else:
-            symlink('/etc/init.d/emutest', '/etc/rc6.d/K20emutest')
-        self.updateList()
-
-    
+     
     def updateList(self):
         import process
         p = process.ProcessList()
         cam_process = str(p.named('emutest.sh')).strip('[]')
-        self['labrun'].hide()
-        self['labstop'].hide()
-        self['labactive'].hide()
-        self['labdisabled'].hide()
         self.my_cam_active = False
         self.my_cam_run = False
-        if path.exists('/etc/rc3.d/S20emutest'):
-            self['labdisabled'].hide()
-            self['labactive'].show()
-            self.my_cam_active = True
-        else:
-            self['labactive'].hide()
-            self['labdisabled'].show()
         if cam_process:
             self.my_cam_run = True
         if self.my_cam_run == True:
@@ -451,7 +406,6 @@ class testcard(Screen):
     def __init__(self, session):
 	Screen.__init__(self, session)
         Screen.setTitle(self, _('Test Card'))
-        self['lab1'] = Label(_('Autostart:'))
         self['labactive'] = Label(_(_('Active')))
         self['labdisabled'] = Label(_(_('Disabled')))
         self['lab2'] = Label(_('Current Status:'))
@@ -462,13 +416,11 @@ class testcard(Screen):
         self.my_cam_run = False
         self['key_red'] = Label(_('ver log'))
         self['key_yellow'] = Label(_('Start'))
-        self['key_blue'] = Label(_('Autostart'))
         self.list = []
         self['list'] = List(self.list)
         self['actions'] = ActionMap(['WizardActions', 'ColorActions', 'MenuActions'], {'back': self.close,
          'red': self.verlog,
-         'yellow': self.camStart,
-         'blue': self.autostart})
+         'yellow': self.camStart})
         self.onLayoutFinish.append(self.updateList)
 
     def camStart(self):
@@ -483,55 +435,14 @@ class testcard(Screen):
             sleep(3)
             self.updateList()
 
-    def autostart(self):
-        if path.exists('/etc/rc0.d/K20cardtest'):
-            unlink('/etc/rc0.d/K20cardtest')
-        else:
-            symlink('/etc/init.d/cardtest', '/etc/rc0.d/K20cardtest')
-        if path.exists('/etc/rc1.d/K20cardtest'):
-            unlink('/etc/rc1.d/K20cardtest')
-        else:
-            symlink('/etc/init.d/cardtest', '/etc/rc1.d/K20cardtest')
-        if path.exists('/etc/rc2.d/S20cardtest'):
-            unlink('/etc/rc2.d/S20cardtest')
-        else:
-            symlink('/etc/init.d/emutest', '/etc/rc2.d/S20cardtest')
-        if path.exists('/etc/rc3.d/S20cardtest'):
-            unlink('/etc/rc3.d/S20cardtest')
-        else:
-            symlink('/etc/init.d/cardtest', '/etc/rc3.d/S20cardtest')
-        if path.exists('/etc/rc4.d/S20cardtest'):
-            unlink('/etc/rc4.d/S20cardtest')
-        else:
-            symlink('/etc/init.d/cardtest', '/etc/rc4.d/S20cardtest')
-        if path.exists('/etc/rc5.d/S20cardtest'):
-            unlink('/etc/rc5.d/S20cardtest')
-        else:
-            symlink('/etc/init.d/cardtest', '/etc/rc5.d/S20cardtest')
-        if path.exists('/etc/rc6.d/K20cardtest'):
-            unlink('/etc/rc6.d/K20cardtest')
-        else:
-            symlink('/etc/init.d/cardtest', '/etc/rc6.d/K20cardtest')
-        self.updateList()
-
+    
     
     def updateList(self):
         import process
         p = process.ProcessList()
         cam_process = str(p.named('cardtest.sh')).strip('[]')
-        self['labrun'].hide()
-        self['labstop'].hide()
-        self['labactive'].hide()
-        self['labdisabled'].hide()
         self.my_cam_active = False
         self.my_cam_run = False
-        if path.exists('/etc/rc3.d/S20cardtest'):
-            self['labdisabled'].hide()
-            self['labactive'].show()
-            self.my_cam_active = True
-        else:
-            self['labactive'].hide()
-            self['labdisabled'].show()
         if cam_process:
             self.my_cam_run = True
         if self.my_cam_run == True:
@@ -550,5 +461,6 @@ class testcard(Screen):
         
     def quit(self):
         self.close()
+
 
 
