@@ -110,6 +110,19 @@ def InitLcd():
 			config.lcd.modeminitv = ConfigNothing()
 			config.lcd.modepip = ConfigNothing()
 			config.lcd.fpsminitv = ConfigNothing()
+
+
+		config.lcd.scroll_speed = ConfigSelection(default = "300", choices = [
+			("500", _("slow")),
+			("300", _("normal")),
+			("100", _("fast"))])
+		config.lcd.scroll_delay = ConfigSelection(default = "10000", choices = [
+			("10000", "10 " + _("seconds")),
+			("20000", "20 " + _("seconds")),
+			("30000", "30 " + _("seconds")),
+			("60000", "1 " + _("minute")),
+			("300000", "5 " + _("minutes")),
+			("noscrolling", _("off"))])
 			
 		def setLCDbright(configElement):
 			ilcd.setBright(configElement.value);
@@ -159,6 +172,8 @@ def InitLcd():
 		config.lcd.contrast = ConfigNothing()
 		config.lcd.bright = ConfigNothing()
 		config.lcd.standby = ConfigNothing()
+		config.lcd.scroll_speed = ConfigSelection(choices = [("300", _("normal"))])
+		config.lcd.scroll_delay = ConfigSelection(choices = [("noscrolling", _("off"))])
 		config.lcd.bright.apply = lambda : doNothing()
 		config.lcd.standby.apply = lambda : doNothing()
 
