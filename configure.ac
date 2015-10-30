@@ -214,7 +214,7 @@ fi
 #	AC_DEFINE(FORCE_SERVICEAVAIL, 1,[define SERVICEAVAIL for GBIPBOX allways true ])
 #fi
 
-if test "$BOXTYPE" == "xc7362"; then
+if test "$BOXTYPE" == "spycat"; then
 	AC_DEFINE(KEY_FAV_TO_KEY_PVR, 1,[define FAV KEY to PVR])
 fi
 
