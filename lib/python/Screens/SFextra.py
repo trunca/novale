@@ -456,24 +456,16 @@ class wifipanel(Screen):
 ######################################################################################
 class CrashLogScreen(Screen):
 	skin = """
-<screen name="CrashLogScreen" position="209,48" size="865,623" title="View or Remove Crashlog files" flags="wfNoBorder" backgroundColor="transparent">
-	<ePixmap pixmap="SF_HD/Bg_EPG_view.png" zPosition="-1" position="0,0" size="865,623" alphatest="on" />
-    <ePixmap pixmap="SF_HD/menu/ico_backup.png" position="32,41" size="40,40" alphatest="blend" transparent="1" />
-    <widget source="Title" render="Label" position="90,50" size="600,32" font="Semiboldit;32" foregroundColor="#5d5d5d" backgroundColor="#27b5b9bd" transparent="1" />
-    <ePixmap pixmap="SF_HD/icons/clock.png" position="750,55" zPosition="1" size="20,20" alphatest="blend" />
-    <widget source="global.CurrentTime" render="Label" position="770,57" zPosition="1" size="50,20" font="Regular;20" foregroundColor="foreground" backgroundColor="#27d9dee2" halign="right" transparent="1">
-      <convert type="ClockToText">Format:%H:%M</convert>
-    </widget>
-    <ePixmap pixmap="SF_HD/border_sf.png" position="125,165" zPosition="-1" size="620,420" transparent="1" alphatest="blend" />
-<widget source="key_red" render="Label" position="86,101" zPosition="1" size="150,25" font="Regular;20" halign="center" valign="center" backgroundColor="darkgrey" foregroundColor="foreground" transparent="1" />
-<eLabel text="View" position="278,101" zPosition="1" size="150,25" font="Regular;20" halign="center" valign="center" backgroundColor="darkgrey" foregroundColor="foreground" transparent="1" />
-<eLabel text="Remove All" position="473,101" zPosition="1" size="150,25" font="Regular;20" halign="center" valign="center" backgroundColor="darkgrey" foregroundColor="foreground" transparent="1" />
-<eLabel text="Remove" position="653,101" zPosition="1" size="150,25" font="Regular;20" halign="center" valign="center" backgroundColor="darkgrey" foregroundColor="foreground" transparent="1" />
-<ePixmap pixmap="SF_HD/buttons/red.png" position="45,98" size="25,25" alphatest="blend" />
-    <ePixmap pixmap="SF_HD/buttons/green.png" position="240,98" size="25,25" alphatest="blend" />
-    <ePixmap pixmap="SF_HD/buttons/blue.png" position="435,98" size="25,25" alphatest="blend" />
-    <ePixmap pixmap="SF_HD/buttons/yellow.png" position="625,98" size="25,25" alphatest="blend" />
-	<widget source="menu" render="Listbox" position="135,180" size="600,350" scrollbarMode="showNever" backgroundColor="#a7a7a7" foregroundColor="#2E2E2E" zPosition="1" transparent="1">
+<screen name="CrashLogScreen" position="center,160" size="750,370" title="View or Remove Crashlog files">
+	<ePixmap position="20,358" zPosition="1" size="170,2" pixmap="/usr/share/enigma2/skin_default/iconos/red.png" alphatest="blend" />
+	<widget source="key_red" render="Label" position="20,328" zPosition="2" size="170,30" font="Regular;20" halign="center" valign="center" backgroundColor="background" foregroundColor="foreground" transparent="1" />
+		<widget source="key_green" render="Label" position="190,328" zPosition="2" size="170,30" font="Regular;20" halign="center" valign="center" backgroundColor="background" foregroundColor="foreground" transparent="1" />
+	<ePixmap position="190,358" zPosition="1" size="170,2" pixmap="/usr/share/enigma2/skin_default/iconos/green.png" alphatest="blend" />
+	<ePixmap position="360,358" zPosition="1" size="170,2" pixmap="/usr/share/enigma2/skin_default/iconos/yellow.png" transparent="1" alphatest="on" />
+	<widget source="key_yellow" render="Label" position="360,328" zPosition="2" size="170,30" valign="center" halign="center" font="Regular;22" transparent="1" />
+	<widget source="key_blue" render="Label" position="530,328" zPosition="2" size="170,30" valign="center" halign="center" font="Regular;22" transparent="1" />
+	<ePixmap position="530,358" zPosition="1" size="170,2" pixmap="/usr/share/enigma2/skin_default/iconos/blue.png" transparent="1" alphatest="on" />
+	<widget source="menu" render="Listbox" position="20,10" size="710,300" scrollbarMode="showOnDemand">
 	<convert type="TemplatedMultiContent">
 	{"template": [
 		MultiContentEntryText(pos = (70, 2), size = (580, 25), font=0, flags = RT_HALIGN_LEFT, text = 0), # index 2 is the Menu Titel
@@ -564,24 +556,15 @@ class CrashLogScreen(Screen):
 ######################################################################################
 class LogScreen(Screen):
 	skin = """
-<screen name="LogScreen" position="209,48" size="865,623" title="View Crashlog file" flags="wfNoBorder" backgroundColor="transparent">
-	<ePixmap pixmap="SF_HD/Bg_EPG_view.png" zPosition="-1" position="0,0" size="865,623" alphatest="on" />
-    <ePixmap pixmap="SF_HD/menu/ico_backup.png" position="32,41" size="40,40" alphatest="blend" transparent="1" />
-    <widget source="Title" render="Label" position="90,50" size="600,32" font="Semiboldit;32" foregroundColor="#5d5d5d" backgroundColor="#27b5b9bd" transparent="1" />
-    <ePixmap pixmap="SF_HD/icons/clock.png" position="750,55" zPosition="1" size="20,20" alphatest="blend" />
-    <widget source="global.CurrentTime" render="Label" position="770,57" zPosition="1" size="50,20" font="Regular;20" foregroundColor="foreground" backgroundColor="#27d9dee2" halign="right" transparent="1">
-      <convert type="ClockToText">Format:%H:%M</convert>
-    </widget>
-    <widget source="key_red" render="Label" position="86,101" zPosition="1" size="150,25" font="Regular;20" halign="center" valign="center" backgroundColor="darkgrey" foregroundColor="foreground" transparent="1" />
-<eLabel text="Restart GUI" position="278,101" zPosition="1" size="150,25" font="Regular;20" halign="center" valign="center" backgroundColor="darkgrey" foregroundColor="foreground" transparent="1" />
-<eLabel text="Save" position="653,101" zPosition="1" size="150,25" font="Regular;20" halign="center" valign="center" backgroundColor="darkgrey" foregroundColor="foreground" transparent="1" />
-<ePixmap pixmap="SF_HD/buttons/red.png" position="45,98" size="25,25" alphatest="blend" />
-    <ePixmap pixmap="SF_HD/buttons/green.png" position="240,98" size="25,25" alphatest="blend" />
-    <ePixmap pixmap="SF_HD/buttons/blue.png" position="435,98" size="25,25" alphatest="blend" />
-    <ePixmap pixmap="SF_HD/buttons/yellow.png" position="625,98" size="25,25" alphatest="blend" />
-	 <ePixmap pixmap="SF_HD/border_console.png" position="125,165" zPosition="-1" size="620,420" transparent="1" alphatest="blend" />
-        <widget name="text" position="130,170" size="600,400" backgroundColor="black" foregroundColor="white" transparent="1" font="Console;14"/>
-  </screen>"""
+<screen name="LogScreen" position="center,80" size="1170,600" title="View Crashlog file">
+	<ePixmap position="20,590" zPosition="1" size="170,2" pixmap="/usr/share/enigma2/skin_default/iconos/red.png" alphatest="blend" />
+	<widget source="key_red" render="Label" position="20,560" zPosition="2" size="170,30" font="Regular;20" halign="center" valign="center" backgroundColor="background" foregroundColor="foreground" transparent="1" />
+	<ePixmap position="190,590" zPosition="1" size="200,2" pixmap="/usr/share/enigma2/skin_default/iconos/green.png" alphatest="blend" />
+	<widget source="key_green" render="Label" position="190,560" zPosition="2" size="200,30" font="Regular;20" halign="center" valign="center" backgroundColor="background" foregroundColor="foreground" transparent="1" />
+	<ePixmap position="390,590" zPosition="1" size="170,2" pixmap="/usr/share/enigma2/skin_default/iconos/yellow.png" alphatest="blend" />
+	<widget source="key_yellow" render="Label" position="390,560" zPosition="2" size="170,30" font="Regular;20" halign="center" valign="center" backgroundColor="background" foregroundColor="foreground" transparent="1" />
+	<widget name="text" position="10,10" size="1150,542" font="Console;22" />
+</screen>"""
 
 	def __init__(self, session, what):
 		self.session = session
@@ -1016,21 +999,9 @@ class Preview(Pixmap):
 class skinpart(Screen):
 	skin = """
 
-<screen name="skinpart" position="209,48" size="865,623" flags="wfNoBorder" backgroundColor="transparent" title="SkinPart install">
-<ePixmap pixmap="SF_HD/Bg_EPG_view.png" zPosition="-1" position="0,0" size="865,623" alphatest="on"/>
-    <ePixmap pixmap="SF_HD/menu/ico_title_Setup.png" position="26,41" size="40,40" alphatest="blend" transparent="1"/>
-    <ePixmap pixmap="SF_HD/icons/clock.png" position="750,55" zPosition="1" size="20,20" alphatest="blend"/>
-    <widget source="global.CurrentTime" render="Label" position="770,57" zPosition="1" size="50,20" font="Regular;20" foregroundColor="#1c1c1c" halign="right" backgroundColor="#27d9dee2" transparent="1">
-      <convert type="ClockToText">Format:%H:%M</convert>
-    </widget>
+<screen name="skinpart" position="209,48" size="865,623" title="SkinPart install">
     <widget source="Title" render="Label" position="90,50" size="600,32" font="Semiboldit;32" foregroundColor="#5d5d5d" backgroundColor="#27b5b9bd" transparent="1" />
      <widget name="preview" position="520,250" size="280,210" zPosition="3" alphatest="blend" transparent="1" borderWidth="2" borderColor="white" /> 
-    <ePixmap pixmap="SF_HD/buttons/red.png" position="45,98" size="25,25" alphatest="blend"/>
-    <ePixmap pixmap="SF_HD/buttons/green.png" position="240,98" size="25,25" alphatest="blend" />
-    <widget source="key_red" render="Label" position="83,98" zPosition="2" size="150,25" foregroundColor="#1c1c1c" font="Regular;20" halign="center" valign="center" backgroundColor="darkgrey" transparent="1"/>
-   <widget source="key_blue" render="Label" position="473,101" zPosition="1" size="150,25" font="Regular;20" halign="center" valign="center" backgroundColor="darkgrey" foregroundColor="foreground" transparent="1" />
-   <ePixmap pixmap="SF_HD/buttons/blue.png" position="435,98" size="25,25" alphatest="blend" />
-    <widget source="key_green" render="Label" position="278,101" zPosition="1" size="150,25" font="Regular;20" halign="center" valign="center" backgroundColor="darkgrey" foregroundColor="foreground" transparent="1" />
     <widget source="menu" render="Listbox" position="60,170" size="420,340" scrollbarMode="showNever" backgroundColor="#27d9dee2" transparent="1">
 	<convert type="TemplatedMultiContent">
 		{"template": [
@@ -1218,29 +1189,21 @@ class skinpart(Screen):
 ##############################################################################
 class memoryinfo(Screen):
 	skin = """
-<screen name="memoryinfo" position="209,48" size="865,623" title="Clear Memory" flags="wfNoBorder" backgroundColor="transparent">
-	    <ePixmap pixmap="SF_HD/Bg_EPG_view.png" zPosition="-1" position="0,0" size="865,623" alphatest="on" />
-    <ePixmap pixmap="SF_HD/menu/ico_backup.png" position="32,41" size="40,40" alphatest="blend" transparent="1" />
-    <widget source="Title" render="Label" position="90,50" size="600,32" font="Semiboldit;32" foregroundColor="#5d5d5d" backgroundColor="#27b5b9bd" transparent="1" />
-    <ePixmap pixmap="SF_HD/icons/clock.png" position="750,55" zPosition="1" size="20,20" alphatest="blend" />
-    <widget source="global.CurrentTime" render="Label" position="770,57" zPosition="1" size="50,20" font="Regular;20" foregroundColor="foreground" backgroundColor="#27d9dee2" halign="right" transparent="1">
-      <convert type="ClockToText">Format:%H:%M</convert>
-    </widget>
-    <ePixmap pixmap="SF_HD/border_sf.png" position="125,165" zPosition="-1" size="620,420" transparent="1" alphatest="blend" />
-    <ePixmap pixmap="SF_HD/buttons/red.png" position="45,98" size="25,25" alphatest="blend" />
-    <ePixmap pixmap="SF_HD/buttons/green.png" position="240,98" size="25,25" alphatest="blend" />
-    <ePixmap pixmap="SF_HD/buttons/yellow.png" position="435,98" size="25,25" alphatest="blend" />
-    <ePixmap pixmap="SF_HD/buttons/blue.png" position="625,98" size="25,25" alphatest="blend" />
-  <widget source="key_yellow" render="Label" position="473,101" zPosition="1" size="150,25" font="Regular;20" halign="center" valign="center" backgroundColor="darkgrey" foregroundColor="foreground" transparent="1" />
-    <widget source="key_blue" render="Label" position="653,101" zPosition="1" size="150,25" font="Regular;20" halign="center" valign="center" backgroundColor="darkgrey" foregroundColor="foreground" transparent="1" />
-    <widget source="key_green" render="Label" position="278,101" zPosition="1" size="150,25" font="Regular;20" halign="center" valign="center" backgroundColor="darkgrey" foregroundColor="foreground" transparent="1" />
-    <widget source="key_red" render="Label" position="86,101" zPosition="1" size="150,25" font="Regular;20" halign="center" valign="center" backgroundColor="darkgrey" foregroundColor="foreground" transparent="1" />
-<widget source="MemoryLabel" render="Label" position="161,200" size="150,22" font="Regular; 26" halign="right" foregroundColor="black" backgroundColor="#a7a7a7" valign="center" transparent="1" />
-<widget source="root" render="Label" position="105,590" size="600,22" zPosition="3" font="Regular; 20" halign="right" foregroundColor="#5d5d5d" backgroundColor="#a7a7a7" valign="center" transparent="1" />
-	<widget source="memTotal" render="Label" position="161,242" zPosition="2" size="450,22" font="Regular;20" halign="left" valign="center" backgroundColor="#a7a7a7" foregroundColor="blue" transparent="1" />
-	<widget source="bufCache" render="Label" position="161,269" zPosition="2" size="450,22" font="Regular;20" halign="left" valign="center" backgroundColor="#a7a7a7" foregroundColor="white" transparent="1" />
-<ePixmap pixmap="SF_HD/liberar_ram.png" zPosition="-1" position="300,290" size="300,300" alphatest="on" />
-   </screen>"""
+<screen name="memoryinfo" position="center,160" size="750,370" title="Clear Memory">
+	<eLabel position="30,220" size="690,2" backgroundColor="#aaaaaa" />
+	<widget position="15,10" size="720,200" name="config" scrollbarMode="showOnDemand" />
+	<ePixmap position="10,358" zPosition="1" size="165,2" pixmap="/usr/share/enigma2/skin_default/iconos/images/red.png" alphatest="blend" />
+	<widget source="key_red" render="Label" position="10,328" zPosition="2" size="165,30" font="Regular;20" halign="center" valign="center" backgroundColor="background" foregroundColor="foreground" transparent="1" />
+	<ePixmap position="175,358" zPosition="1" size="165,2" pixmap="/usr/share/enigma2/skin_default/iconos/green.png" alphatest="blend" />
+	<widget source="key_green" render="Label" position="175,328" zPosition="2" size="165,30" font="Regular;20" halign="center" valign="center" backgroundColor="background" foregroundColor="foreground" transparent="1" />
+	<ePixmap position="340,358" zPosition="1" size="195,2" pixmap="/usr/share/enigma2/skin_default/iconos/yellow.png" alphatest="blend" />
+<widget source="key_blue" render="Label" position="530,328" zPosition="2" size="170,30" valign="center" halign="center" font="Regular;22" transparent="1" />
+	<ePixmap position="530,358" zPosition="1" size="170,2" pixmap="/usr/share/enigma2/skin_default/iconos/blue.png" transparent="1" alphatest="on" />
+	<widget source="key_yellow" render="Label" position="340,328" zPosition="2" size="195,30" font="Regular;20" halign="center" valign="center" backgroundColor="background" foregroundColor="foreground" transparent="1" />
+	<widget source="MemoryLabel" render="Label" position="55,235" size="150,22" font="Regular; 20" halign="right" foregroundColor="#aaaaaa" />
+	<widget source="memTotal" render="Label" position="220,235" zPosition="2" size="450,22" font="Regular;20" halign="left" valign="center" backgroundColor="background" foregroundColor="foreground" transparent="1" />
+	<widget source="bufCache" render="Label" position="220,260" zPosition="2" size="450,22" font="Regular;20" halign="left" valign="center" backgroundColor="background" foregroundColor="foreground" transparent="1" />
+</screen>"""
 
 	def __init__(self, session):
 		self.session = session

@@ -51,19 +51,11 @@ import gettext
 
 class SFsearchupgrade(Screen):
 	skin = """
-<screen name="SFsearchupgrade" position="209,48" size="865,623" title="sf_title" flags="wfNoBorder" backgroundColor="transparent">
-    <ePixmap pixmap="SF_HD/Bg_EPG_view.png" zPosition="-1" position="0,0" size="865,623" alphatest="on" />
-    <ePixmap pixmap="SF_HD/menu/ico_backup.png" position="32,41" size="40,40" alphatest="blend" transparent="1" />
-    <widget source="Title" render="Label" position="90,50" size="600,32" font="Semiboldit;32" foregroundColor="#5d5d5d" backgroundColor="#27b5b9bd" transparent="1" />
-    <ePixmap pixmap="SF_HD/icons/clock.png" position="750,55" zPosition="1" size="20,20" alphatest="blend" />
-    <widget source="global.CurrentTime" render="Label" position="770,57" zPosition="1" size="50,20" font="Regular;20" foregroundColor="foreground" backgroundColor="#27d9dee2" halign="right" transparent="1">
-      <convert type="ClockToText">Format:%H:%M</convert>
-    </widget>
-    <ePixmap pixmap="SF_HD/border_sf.png" position="125,165" zPosition="-1" size="620,420" transparent="1" alphatest="blend" />
-<widget name="key_red" position="86,101" zPosition="1" size="150,25" font="Regular;20" halign="center" valign="center" backgroundColor="darkgrey" foregroundColor="foreground" transparent="1" />
-    <widget name="key_green" position="278,101" zPosition="1" size="150,25" font="Regular;20" halign="center" valign="center" backgroundColor="darkgrey" foregroundColor="foreground" transparent="1" />
-<ePixmap pixmap="SF_HD/buttons/red.png" position="45,98" size="25,25" alphatest="blend" />
-    <ePixmap pixmap="SF_HD/buttons/green.png" position="240,98" size="25,25" alphatest="blend" />
+<screen name="SFsearchupgrade" position="center,160" size="750,370" title="sf_title" >
+    <ePixmap position="20,358" zPosition="1" size="170,2" pixmap="/usr/share/enigma2/skin_default/iconos/red.png" alphatest="blend" />
+	<widget source="key_red" render="Label" position="20,328" zPosition="2" size="170,30" font="Regular;20" halign="center" valign="center" backgroundColor="background" foregroundColor="foreground" transparent="1" />
+	<widget source="key_green" render="Label" position="190,328" zPosition="2" size="170,30" font="Regular;20" halign="center" valign="center" backgroundColor="background" foregroundColor="foreground" transparent="1" />
+	<ePixmap position="190,358" zPosition="1" size="170,2" pixmap="/usr/share/enigma2/skin_default/iconos/green.png" alphatest="blend" />
         
    </screen>"""
 	  
@@ -101,35 +93,26 @@ class SFsearchupgrade(Screen):
 
 class SFupgrade(Screen):
 	skin = """
-<screen name="SFsearchupgrade" position="209,48" size="865,623" title="sf_title" flags="wfNoBorder" backgroundColor="transparent">
-    <ePixmap pixmap="SF_HD/Bg_EPG_view.png" zPosition="-1" position="0,0" size="865,623" alphatest="on" />
-    <ePixmap pixmap="SF_HD/menu/ico_backup.png" position="32,41" size="40,40" alphatest="blend" transparent="1" />
-    <widget source="Title" render="Label" position="90,50" size="600,32" font="Semiboldit;32" foregroundColor="#5d5d5d" backgroundColor="#27b5b9bd" transparent="1" />
-    <ePixmap pixmap="SF_HD/icons/clock.png" position="750,55" zPosition="1" size="20,20" alphatest="blend" />
-    <widget source="global.CurrentTime" render="Label" position="770,57" zPosition="1" size="50,20" font="Regular;20" foregroundColor="foreground" backgroundColor="#27d9dee2" halign="right" transparent="1">
-      <convert type="ClockToText">Format:%H:%M</convert>
-    </widget>
-    <ePixmap pixmap="SF_HD/border_sf.png" position="125,165" zPosition="-1" size="620,420" transparent="1" alphatest="blend" />
-<widget name="key_red" position="86,101" zPosition="1" size="150,25" font="Regular;20" halign="center" valign="center" backgroundColor="darkgrey" foregroundColor="foreground" transparent="1" />
-    <widget name="key_green" position="278,101" zPosition="1" size="150,25" font="Regular;20" halign="center" valign="center" backgroundColor="darkgrey" foregroundColor="foreground" transparent="1" />
-    <widget name="key_blue" position="473,101" zPosition="1" size="150,25" font="Regular;20" halign="center" valign="center" backgroundColor="darkgrey" foregroundColor="foreground" transparent="1" />
-    <widget name="key_yellow" position="653,101" zPosition="1" size="150,25" font="Regular;20" halign="center" valign="center" backgroundColor="darkgrey" foregroundColor="foreground" transparent="1" />
-<ePixmap pixmap="SF_HD/buttons/red.png" position="45,98" size="25,25" alphatest="blend" />
-    <ePixmap pixmap="SF_HD/buttons/green.png" position="240,98" size="25,25" alphatest="blend" />
-    <ePixmap pixmap="SF_HD/buttons/blue.png" position="435,98" size="25,25" alphatest="blend" />
-    <ePixmap pixmap="SF_HD/buttons/yellow.png" position="625,98" size="25,25" alphatest="blend" />
-    <widget source="menu" render="Listbox" zPosition="1" position="135,180" size="600,450" scrollbarMode="showNever" backgroundColor="#a7a7a7" foregroundColor="#2E2E2E"  transparent="1">
+<screen name="SFsearchupgrade" position="center,160" size="750,370" title="sf_title" >
+        <widget source="key_red" render="Label" position="20,328" zPosition="2" size="170,30" font="Regular;20" halign="center" valign="center" backgroundColor="background" foregroundColor="foreground" transparent="1" />
+		<widget source="key_green" render="Label" position="190,328" zPosition="2" size="170,30" font="Regular;20" halign="center" valign="center" backgroundColor="background" foregroundColor="foreground" transparent="1" />
+	<ePixmap position="190,358" zPosition="1" size="170,2" pixmap="/usr/share/enigma2/skin_default/iconos/green.png" alphatest="blend" />
+	<ePixmap position="360,358" zPosition="1" size="170,2" pixmap="/usr/share/enigma2/skin_default/iconos/yellow.png" transparent="1" alphatest="on" />
+	<widget source="key_yellow" render="Label" position="360,328" zPosition="2" size="170,30" valign="center" halign="center" font="Regular;22" transparent="1" />
+	<widget source="key_blue" render="Label" position="530,328" zPosition="2" size="170,30" valign="center" halign="center" font="Regular;22" transparent="1" />
+	<ePixmap position="530,358" zPosition="1" size="170,2" pixmap="/usr/share/enigma2/skin_default/iconos/blue.png" transparent="1" alphatest="on" />
+    <widget source="menu" render="Listbox" position="20,10" size="710,300" scrollbarMode="showOnDemand">
 	<convert type="TemplatedMultiContent">
-		{"template": [
-			MultiContentEntryText(pos = (70, 2), size = (630, 25), font=0, flags = RT_HALIGN_LEFT, text = 0), # index 2 is the Menu Titel
-			MultiContentEntryText(pos = (80, 29), size = (630, 18), font=1, flags = RT_HALIGN_LEFT, text = 1), # index 3 is the Description
-			MultiContentEntryPixmapAlphaTest(pos = (5, 5), size = (50, 40), png = 2), # index 4 is the pixmap
-				],
+	{"template": [
+		MultiContentEntryText(pos = (70, 2), size = (580, 25), font=0, flags = RT_HALIGN_LEFT, text = 0), # index 2 is the Menu Titel
+		MultiContentEntryText(pos = (80, 29), size = (580, 18), font=1, flags = RT_HALIGN_LEFT, text = 1), # index 3 is the Description
+		MultiContentEntryPixmapAlphaTest(pos = (5, 5), size = (51, 40), png = 2), # index 4 is the pixmap
+			],
 	"fonts": [gFont("Regular", 23),gFont("Regular", 16)],
 	"itemHeight": 50
 	}
-	</convert>
-	</widget>
+			</convert>
+		</widget>
    
    </screen>"""
 	  

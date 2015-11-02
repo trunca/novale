@@ -25,27 +25,63 @@ from Plugins.SystemPlugins.CrossEPG.crossepg_importer import CrossEPG_Importer
 from Plugins.SystemPlugins.CrossEPG.crossepglib import *
 from Plugins.SystemPlugins.CrossEPG.crossepg_loader import CrossEPG_Loader
 
+def Check_camtest():
+	found = False
+	for x in listdir('/usr/bin'):
+		if x.find('emutest.') > -1:
+			found = True
+			break;
+	return found
+
+def Check_ecccam():
+	found = False
+	for x in listdir('/usr/lib/enigma2/python/Screens/'):
+		if x.find('ecccam.') > -1:
+			found = True
+			break;
+	return found
+
 class mainSFPanel(Screen):
 	skin = """
-		<screen name="mainSFPanel" position="209,48" size="865,623" title="SFpanel" flags="wfNoBorder" backgroundColor="transparent">	
-    <ePixmap pixmap="SF_HD/Bg_EPG_view.png" zPosition="-1" position="0,0" size="865,623" alphatest="on"/>
-    <ePixmap pixmap="SF_HD/menu/ico_title_Setup.png" position="32,41" size="40,40" alphatest="blend" transparent="1"/>
-    <eLabel text="SFpanel" position="90,50" size="600,32" font="Semiboldit;32" foregroundColor="#5d5d5d" backgroundColor="#27b5b9bd" transparent="1"/>
-    <ePixmap pixmap="SF_HD/icons/clock.png" position="750,55" zPosition="1" size="20,20" alphatest="blend"/>
-    <widget source="global.CurrentTime" render="Label" position="770,57" zPosition="1" size="50,20" font="Regular;20" foregroundColor="#1c1c1c" backgroundColor="#27d9dee2" halign="right" transparent="1">
-      <convert type="ClockToText">Format:%H:%M</convert>
-    </widget>
-    <ePixmap pixmap="SF_HD/buttons/red.png" position="45,98" size="25,25" alphatest="blend"/>
-    <widget source="key_red" render="Label" position="86,97" zPosition="1" size="150,25" font="Regular;20" halign="center" valign="center" backgroundColor="darkgrey" foregroundColor="#1c1c1c" transparent="1"/>
-    <ePixmap pixmap="SF_HD/border_menu1.png" position="60,140" zPosition="-1" size="342,370" transparent="1" alphatest="blend"/>
-    <widget name="list" position="70,150" size="320,350" backgroundColor="#a7a7a7" itemHeight="50" transparent="1" />
-    <widget name="sublist" position="410,150" size="320,350" backgroundColor="#27d9dee2" itemHeight="50" />
-    <widget name="description" position="130,540" size="600,110" zPosition="1" font="Regular;22" halign="center" foregroundColor="#5d5d5d" backgroundColor="#27b5b9bd" transparent="1" />
-    <ePixmap pixmap="/usr/share/enigma2/sfpanel/sel.png" position="65,528" size="60,600" alphatest="blend" transparent="1"/>
-          
-  </screen> """
-
-	def __init__(self, session):
+<screen name="mainSFPanel" position="center,center" size="1180,600" backgroundColor="black" flags="wfBorder">
+<widget name="list" position="21,32" size="370,400" backgroundColor="black" transparent="1" >
+<convert type="TemplatedMultiContent">
+	{"template": [
+		MultiContentEntryText(pos = (70, 2), size = (580, 25), font=0, flags = RT_HALIGN_LEFT, text = 0), # index 2 is the Menu Titel
+		MultiContentEntryText(pos = (80, 29), size = (580, 18), font=1, flags = RT_HALIGN_LEFT, text = 1), # index 3 is the Description
+		MultiContentEntryPixmapAlphaTest(pos = (5, 5), size = (50, 40), png = 2), # index 4 is the pixmap
+			],
+	"fonts": [gFont("Regular", 23),gFont("Regular", 16)],
+	"itemHeight": 50
+	}
+			</convert>
+		</widget>
+<widget name="sublist" position="410,32" size="300,400" backgroundColor="black" >
+<convert type="TemplatedMultiContent">
+	{"template": [
+		MultiContentEntryText(pos = (70, 2), size = (580, 25), font=0, flags = RT_HALIGN_LEFT, text = 0), # index 2 is the Menu Titel
+		MultiContentEntryText(pos = (80, 29), size = (580, 18), font=1, flags = RT_HALIGN_LEFT, text = 1), # index 3 is the Description
+		MultiContentEntryPixmapAlphaTest(pos = (5, 5), size = (50, 40), png = 2), # index 4 is the pixmap
+			],
+	"fonts": [gFont("Regular", 23),gFont("Regular", 16)],
+	"itemHeight": 50
+	}
+			</convert>
+		</widget>
+<eLabel position="400,30" size="2,400" backgroundColor="darkgrey" zPosition="3" />
+<widget source="session.VideoPicture" render="Pig" position="720,30" size="450,300" backgroundColor="transparent" zPosition="1" />
+<widget name="description" position="22,445" size="1150,110" zPosition="1" font="Regular;22" halign="center" backgroundColor="black" transparent="1" />
+<widget name="key_red" position="20,571" size="300,26" zPosition="1" font="Regular;22" halign="center" foregroundColor="white" backgroundColor="black" transparent="1" />
+<widget name="key_green" position="325,571" size="300,26" zPosition="1" font="Regular;22" halign="center" foregroundColor="white" backgroundColor="black" transparent="1" />
+<widget name="key_yellow" position="630,571" size="300,26" zPosition="1" font="Regular;22" halign="center" foregroundColor="white" backgroundColor="black" transparent="1" valign="center" />
+<widget name="key_blue" position="935,571" size="234,26" zPosition="1" font="Regular;22" halign="center" foregroundColor="white" backgroundColor="black" transparent="1" />
+<eLabel name="new eLabel" position="21,567" size="300,3" zPosition="3" backgroundColor="red" />
+<eLabel name="new eLabel" position="325,567" size="300,3" zPosition="3" backgroundColor="green" />
+<eLabel name="new eLabel" position="630,567" size="300,3" zPosition="3" backgroundColor="yellow" />
+<eLabel name="new eLabel" position="935,567" size="234,3" zPosition="3" backgroundColor="blue" />
+</screen> """
+		
+	def __init__(self, session, args = 0):
 		Screen.__init__(self, session)
 		
 		Screen.setTitle(self, _("Sfpanel Menu"))
@@ -151,6 +187,10 @@ class mainSFPanel(Screen):
 		self.sublist = []
 		self.sublist.append(SFSubMenuEntryComponent("Softcam Panel",_("Control your Softcams"),_("Use the Softcam Panel to control your Cam. This let you start/stop/select a cam")))
 		self.sublist.append(SFSubMenuEntryComponent(_("card-Panel Setup"),_("Control your Cardserver"),_('Use the Cardserver Panel to control your Cam. This let you start/stop/select a cam')))
+		if Check_camtest():
+			self.sublist.append(SFSubMenuEntryComponent(_("CheckSoftcam"),_("Testea softcam activa"),_('Chequea si el softcam esta activo y si no lo levanta')))
+		if Check_ecccam():
+			self.sublist.append(SFSubMenuEntryComponent(_("CCcamEdit"),_("Inserte o edite CCcam"),_('Inserte o edite una linea Cccam del archivo CCcam.cfg')))
 		self.sublist.append(SFSubMenuEntryComponent(_("CCcam suite"),_("Informacion CCcam emu"),_('Acceda a toda la informacion de su emuladora cccam')))
 		self.sublist.append(SFSubMenuEntryComponent(_("Oscam suite"),_("Informacion oscam emu"),_('Acceda a toda la informacion de su emuladora oscam')))
 		self.sublist.append(SFSubMenuEntryComponent(_("Gbox suite"),_("Informacion Gbox emu"),_('Acceda a toda la informacion de su emuladora gbox o mbox')))
@@ -270,6 +310,12 @@ class mainSFPanel(Screen):
 		elif item[0] == _("card-Panel Setup"):
 			import CardPanel
             		self.session.open(CardPanel.CardserverSetup)
+		elif item[0] == _("CheckSoftcam"):
+            		from Plugins.Extensions.CamCheck.plugin import SetupCamTest
+			self.session.open(SetupCamTest)
+		elif item[0] == _("CCcamEdit"):
+            		import ecccam
+			self.session.open(ecccam.ecccam_setup)
 		elif item[0] == _("CCcam suite"):
             		sys.path.append('/usr/lib/enigma2/python/Screens/SFextra/CCcamInfo')
 	    		import cccaminfo

@@ -39,7 +39,6 @@ class CardserverSetup(Screen, ConfigListScreen):
         self.setup_title = _('Cardserver Setup')
         self["lab1"] = Label()
         self['actions'] = ActionMap(['OkCancelActions', 'ColorActions', 'CiSelectionActions'], {'cancel': self.cancel,
-         'blue': self.cardtest,
          'green': self.save,
          'red': self.cancel}, -1)
         self.list = []
@@ -59,12 +58,8 @@ class CardserverSetup(Screen, ConfigListScreen):
         self["lab1"].setText("%d  Cams Instaladas" % (len(self.list)))
         self['key_red'] = Label(_('Cancel'))
         self['key_green'] = Label(_('OK'))
-        self['key_blue'] = Label(_('Test Card'))
         self.onLayoutFinish.append(self.layoutFinished)
 
-    def cardtest(self):
-        import Mediatomb
-        self.session.open(Mediatomb.testcard)
 
     def setEcmInfo(self):
         newEcmFound, ecmInfo = self.ecminfo.getEcm()

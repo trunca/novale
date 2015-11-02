@@ -39,7 +39,6 @@ class SoftcamSetupSF(Screen, ConfigListScreen):
         self.setup_title = _('Softcam Setup')
 	self["lab1"] = Label()
         self['actions'] = ActionMap(['OkCancelActions', 'ColorActions', 'CiSelectionActions'], {'cancel': self.cancel,
-         'blue': self.camtest,
          'green': self.save,
          'red': self.cancel}, -1)
         self.list = []
@@ -59,12 +58,9 @@ class SoftcamSetupSF(Screen, ConfigListScreen):
 	self["lab1"].setText("%d  Cams Instaladas" % (len(self.list)))
         self['key_red'] = Label(_('Cancel'))
         self['key_green'] = Label(_('OK'))
-        self['key_blue'] = Label(_('Test Cam'))
         self.onLayoutFinish.append(self.layoutFinished)
 
-    def camtest(self):
-        import Mediatomb
-        self.session.open(Mediatomb.testcam)
+
 
     def setEcmInfo(self):
         newEcmFound, ecmInfo = self.ecminfo.getEcm()
