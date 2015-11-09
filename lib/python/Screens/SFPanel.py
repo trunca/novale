@@ -232,6 +232,7 @@ class mainSFPanel(Screen):
 		self.sublist.append(SFSubMenuEntryComponent("Update feeds",_("Actualizar feed"),_("Actualizar lista de feed del servidor")))
 		self.sublist.append(SFSubMenuEntryComponent("Upgrade feeds",_("Upgrade feed"),_("Upgrade feed lista servidor")))
 		self.sublist.append(SFSubMenuEntryComponent("Crashlog",_("Crashlog view"),_("Crashlog view")))
+		self.sublist.append(SFSubMenuEntryComponent("Kernel Manager",_("Kernel Manager"),_("Informacion Kernel modules, Activacion")))
 		self["sublist"].l.setList(self.sublist)
 ######## Menu Multimedia ##############################
 	def SFMultimedia(self):
@@ -257,6 +258,7 @@ class mainSFPanel(Screen):
 		self.sublist.append(SFSubMenuEntryComponent("Box uptime",_("Box uptime"),_("Box uptime receptor")))
 		self.sublist.append(SFSubMenuEntryComponent("Public IP",_("Public IP"),_("view Public IP")))
 		self.sublist.append(SFSubMenuEntryComponent("Mac Adress",_("Mac Adress"),_("view Mac Adress")))
+		self.sublist.append(SFSubMenuEntryComponent("Changelog SFteam",_("Changelog SFteam"),_("view changelog imagenes SFteam")))
 		self["sublist"].l.setList(self.sublist)
 ######## Menu SKIN ##############################
 	def SFskin(self):
@@ -417,6 +419,9 @@ class mainSFPanel(Screen):
 		elif item[0] == _("Crashlog"):
 			import SFextra
 			self.session.open(SFextra.CrashLogScreen)
+		elif item[0] == _("Kernel Manager"):
+			import SFextra
+			self.session.open(SFextra.KernelScreen)
 
 
 
@@ -455,6 +460,8 @@ class mainSFPanel(Screen):
 			self.miip()
 		elif item[0] == _("Mac Adress"):
 			self.mac()
+		elif item[0] == _("Changelog SFteam"):
+			self.changelog()
 
 ######## Seleccion skin ##############################
 		if item[0] == _("weather"):
@@ -577,6 +584,10 @@ class mainSFPanel(Screen):
 		mostrardriver = os.popen("opkg list-installed | grep dvb-mod").read()
 		self.mbox = self.session.open(MessageBox,_("Driver install is: %s") % (mostrardriver), MessageBox.TYPE_INFO, timeout = 10 )
 
+   	def changelog(self):
+		os.popen("wget -qO /tmp/.changelog http://feeds.sfteam.es/sfteam-4.2.2/Changelog.txt")
+		self.session.open(SFConsole, title=_('Changelog SFteam'), cmdlist=['cat /tmp/.changelog'])
+		
 
 ######## creacion menu lista #######################
 def SFMenuEntryComponent(name, description, long_description = None, width=540):

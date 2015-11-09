@@ -529,12 +529,17 @@ class CrashLogScreen(Screen):
 			logging('%02d:%02d:%d %02d:%02d:%02d - %s\r\n' % (now.tm_mday, now.tm_mon, now.tm_year, now.tm_hour, now.tm_min, now.tm_sec, str(e)))
 	
 	def YellowKey(self):
-		if self["menu"].getCurrent()[0] is not None:
-			item = self.path + self["menu"].getCurrent()[0]
-			if fileExists(item):
-				os.remove(item)
-			self.mbox = self.session.open(MessageBox,(_("Removed %s") % item), MessageBox.TYPE_INFO, timeout = 4 )
+		try:
+			if self["menu"].getCurrent()[0] is not None:
+				item = self.path + self["menu"].getCurrent()[0]
+				if fileExists(item):
+					os.remove(item)
+				self.mbox = self.session.open(MessageBox,(_("Removed %s") % item), MessageBox.TYPE_INFO, timeout = 4 )
+		except:
+			pass
+				
 		self.CfgMenu()
+		
 		
 	def BlueKey(self):
 		log_name = []
@@ -1280,4 +1285,178 @@ class memoryinfo(Screen):
 		
 	def exit(self):
 		self.close()
+
+######################################################################################
+class KernelScreen(Screen):
+	skin = """
+<screen name="KernelScreen" position="center,100" size="750,570" title="Kernel Modules Manager">
+	<ePixmap position="20,558" zPosition="1" size="170,2" pixmap="/usr/share/enigma2/skin_default/iconos/red.png" alphatest="blend" />
+	<widget source="key_red" render="Label" position="20,528" zPosition="2" size="170,30" font="Regular;20" halign="center" valign="center" backgroundColor="background" foregroundColor="foreground" transparent="1" />
+	<widget source="key_green" render="Label" position="185,528" zPosition="2" size="210,30" font="Regular;20" halign="center" valign="center" backgroundColor="background" foregroundColor="foreground" transparent="1" />
+	<ePixmap position="190,558" zPosition="1" size="200,2" pixmap="/usr/share/enigma2/skin_default/iconos/green.png" alphatest="blend" />
+	<ePixmap position="390,558" zPosition="1" size="170,2" pixmap="/usr/share/enigma2/skin_default/iconos/yellow.png" transparent="1" alphatest="on" />
+	<widget source="key_yellow" render="Label" position="390,528" zPosition="2" size="170,30" valign="center" halign="center" font="Regular;22" transparent="1" />
+	<widget source="key_blue" render="Label" position="560,528" zPosition="2" size="170,30" valign="center" halign="center" font="Regular;22" transparent="1" />
+	<ePixmap position="560,558" zPosition="1" size="170,2" pixmap="/usr/share/enigma2/skin_default/iconos/blue.png" transparent="1" alphatest="on" />
+	<widget source="menu" render="Listbox" position="20,10" size="710,500" scrollbarMode="showOnDemand">
+	<convert type="TemplatedMultiContent">
+	{"template": [
+		MultiContentEntryText(pos = (70, 2), size = (580, 25), font=0, flags = RT_HALIGN_LEFT, text = 0), # index 2 is the Menu Titel
+		MultiContentEntryText(pos = (80, 29), size = (580, 18), font=1, flags = RT_HALIGN_LEFT, text = 1), # index 3 is the Description
+		MultiContentEntryPixmapAlphaTest(pos = (5, 5), size = (51, 40), png = 2), # index 4 is the pixmap
+			],
+	"fonts": [gFont("Regular", 23),gFont("Regular", 16)],
+	"itemHeight": 50
+	}
+			</convert>
+		</widget>
+</screen>"""
+
+	def __init__(self, session):
+		self.session = session
+		Screen.__init__(self, session)
+		self.iConsole = iConsole()
+		self.index = 0
+		self.runmodule = ''
+		self.module_list()
+		self.setTitle(_("Kernel Modules Manager"))
+		self["shortcuts"] = ActionMap(["ShortcutActions", "WizardActions"],
+		{
+			"ok": self.Ok,
+			"cancel": self.exit,
+			"back": self.exit,
+			"red": self.exit,
+			"green": self.Ok,
+			"yellow": self.YellowKey,
+			"blue": self.BlueKey,
+		})
+		self["key_red"] = StaticText(_("Close"))
+		self["key_green"] = StaticText(_("Load/UnLoad"))
+		self["key_yellow"] = StaticText(_("LsMod"))
+		self["key_blue"] = StaticText(_("Reboot"))
+		self.list = []
+		self["menu"] = List(self.list)
+		
+	def module_list(self):
+		self.iConsole.ePopen('find /lib/modules/*/kernel/drivers/ | grep .ko', self.IsRunnigModDig)
+		
+	def BlueKey(self):
+		self.session.open(TryQuitMainloop, 2)
+		
+	def YellowKey(self):
+		self.session.open(lsmodScreen)
+		
+	def IsRunnigModDig(self, result, retval, extra_args):
+		self.iConsole.ePopen('lsmod', self.run_modules_list, result)
+		
+	def run_modules_list(self, result, retval, extra_args):
+		self.runmodule = ''
+		if retval is 0:
+			for line in result.splitlines():
+				self.runmodule += line.split()[0].replace('-','_') + ' '
+		self.CfgMenu(extra_args)
+					
+	def CfgMenu(self, result):
+		self.list = []
+		minipngmem = LoadPixmap(cached=True, path="/usr/share/enigma2/sfpanel/kernelminimem.png")
+		minipng = LoadPixmap(cached=True, path="/usr/share/enigma2/sfpanel/kernelmini.png")
+		if result:
+			for line in result.splitlines():
+				if line.split('/')[-1][:-3].replace('-','_') in self.runmodule.replace('-','_'):
+					self.list.append((line.split('/')[-1], line.split('kernel')[-1], minipngmem, line, True))
+				else:
+					self.list.append((line.split('/')[-1], line.split('kernel')[-1], minipng, line, False))
+			self["menu"].setList(self.list)
+			self["menu"].setIndex(self.index)
+		self["actions"] = ActionMap(["OkCancelActions"], {"ok": self.Ok, "cancel": self.close}, -1)
+
+	def Ok(self):
+		module_name = ''
+		module_name =  self["menu"].getCurrent()[-2].split('/')[-1][:-3]
+		if not self["menu"].getCurrent()[-1]:
+			self.load_module(module_name)
+		else:
+			self.unload_modele(module_name)
+		self.index = self["menu"].getIndex()
+		
+	def unload_modele(self, module_name):
+		self.iConsole.ePopen("modprobe -r %s" % module_name, self.rem_conf, module_name)
+		
+	def rem_conf(self, result, retval, extra_args):
+		self.iConsole.ePopen('rm -f /etc/modules-load.d/%s.conf' % extra_args, self.info_mess, extra_args)
+		
+	def info_mess(self, result, retval, extra_args):
+		self.mbox = self.session.open(MessageBox,_("UnLoaded %s.ko") % extra_args, MessageBox.TYPE_INFO, timeout = 4 )
+		self.module_list()
+		
+	def load_module(self, module_name):
+		self.iConsole.ePopen("modprobe %s" % module_name, self.write_conf, module_name)
+		
+	def write_conf(self, result, retval, extra_args):
+		if retval is 0:
+			with open('/etc/modules-load.d/%s.conf' % extra_args, 'w') as autoload_file:
+				autoload_file.write('%s' % extra_args)
+				autoload_file.close()
+			self.mbox = self.session.open(MessageBox,_("Loaded %s.ko") % extra_args, MessageBox.TYPE_INFO, timeout = 4 )
+			self.module_list()
+		
+	def exit(self):
+		self.close()
+######################################################################################
+class lsmodScreen(Screen):
+	skin = """
+<screen name="lsmodScreen" position="center,100" size="750,570" title="Kernel Drivers in Memory">
+	<ePixmap position="20,558" zPosition="1" size="170,2" pixmap="/usr/share/enigma2/skin_default/iconos/red.png" alphatest="blend" />
+	<widget source="key_red" render="Label" position="20,528" zPosition="2" size="170,30" font="Regular;20" halign="center" valign="center" backgroundColor="background" foregroundColor="foreground" transparent="1" />
+	<widget source="menu" render="Listbox" position="20,10" size="710,500" scrollbarMode="showOnDemand">
+	<convert type="TemplatedMultiContent">
+	{"template": [
+		MultiContentEntryText(pos = (70, 2), size = (580, 25), font=0, flags = RT_HALIGN_LEFT, text = 0), # index 2 is the Menu Titel
+		MultiContentEntryText(pos = (80, 29), size = (580, 18), font=1, flags = RT_HALIGN_LEFT, text = 1), # index 3 is the Description
+		MultiContentEntryPixmapAlphaTest(pos = (5, 5), size = (51, 40), png = 2), # index 4 is the pixmap
+			],
+	"fonts": [gFont("Regular", 23),gFont("Regular", 16)],
+	"itemHeight": 50
+	}
+			</convert>
+		</widget>
+	</screen>"""
+
+	def __init__(self, session):
+		self.session = session
+		Screen.__init__(self, session)
+		self.iConsole = iConsole()
+		self.setTitle(_("Kernel Drivers in Memory"))
+		self["shortcuts"] = ActionMap(["ShortcutActions", "WizardActions"],
+		{
+			"cancel": self.exit,
+			"back": self.exit,
+			"red": self.exit,
+			})
+		self["key_red"] = StaticText(_("Close"))
+		self.list = []
+		self["menu"] = List(self.list)
+		self.CfgMenu()
+
+	def CfgMenu(self):
+		self.iConsole.ePopen('lsmod', self.run_modules_list)
+		
+	def run_modules_list(self, result, retval, extra_args):
+		self.list = []
+		aliasname = ''
+		minipng = LoadPixmap(cached=True, path="/usr/share/enigma2/sfpanel/kernelminimem.png")
+		if retval is 0:
+			for line in result.splitlines():
+				if len(line.split()) > 3:
+					aliasname = line.split()[-1]
+				else: 
+					aliasname = ' '
+				if 'Module' not in line:
+					self.list.append((line.split()[0],( _("size: %s  %s") % (line.split()[1], aliasname)), minipng))
+		self["menu"].setList(self.list)
+		self["actions"] = ActionMap(["OkCancelActions"], { "cancel": self.close}, -1)
+
+	def exit(self):
+		self.close()
+################################################################
 		
