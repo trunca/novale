@@ -41,6 +41,14 @@ def Check_ecccam():
 			break;
 	return found
 
+def Check_magic():
+	found = False
+	for x in listdir('/etc/opkg/'):
+		if x.find('magic-sfteam-feed.') > -1:
+			found = True
+			break;
+	return found
+
 class mainSFPanel(Screen):
 	skin = """
 <screen name="mainSFPanel" position="center,center" size="1180,600" backgroundColor="black" flags="wfBorder">
@@ -233,6 +241,8 @@ class mainSFPanel(Screen):
 		self.sublist.append(SFSubMenuEntryComponent("Upgrade feeds",_("Upgrade feed"),_("Upgrade feed lista servidor")))
 		self.sublist.append(SFSubMenuEntryComponent("Crashlog",_("Crashlog view"),_("Crashlog view")))
 		self.sublist.append(SFSubMenuEntryComponent("Kernel Manager",_("Kernel Manager"),_("Informacion Kernel modules, Activacion")))
+		if Check_magic():
+			self.sublist.append(SFSubMenuEntryComponent(_("SFteam Magic"),_("Descargas privadas"),_('Descargas privadas del grupo SFteam')))
 		self["sublist"].l.setList(self.sublist)
 ######## Menu Multimedia ##############################
 	def SFMultimedia(self):
@@ -422,6 +432,9 @@ class mainSFPanel(Screen):
 		elif item[0] == _("Kernel Manager"):
 			import SFextra
 			self.session.open(SFextra.KernelScreen)
+		elif item[0] == _("SFteam Magic"):
+			import SFextra
+			self.session.open(SFextra.magicsfteam)
 
 
 

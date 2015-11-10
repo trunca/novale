@@ -1458,5 +1458,75 @@ class lsmodScreen(Screen):
 
 	def exit(self):
 		self.close()
-################################################################
+#####################################################################################################
+class magicsfteam(Screen):
+	skin = """
+<screen name="magicsfteam" position="center,center" size="750,570" title="SFteam Magic Dowload">
+   <widget source="menu" render="Listbox" position="20,10" size="710,500" scrollbarMode="showOnDemand">
+	<convert type="TemplatedMultiContent">
+	{"template": [
+		MultiContentEntryText(pos = (70, 2), size = (580, 25), font=0, flags = RT_HALIGN_LEFT, text = 0), # index 2 is the Menu Titel
+		MultiContentEntryText(pos = (80, 29), size = (580, 18), font=1, flags = RT_HALIGN_LEFT, text = 1), # index 3 is the Description
+		MultiContentEntryPixmapAlphaTest(pos = (5, 5), size = (51, 40), png = 2), # index 4 is the pixmap
+			],
+	"fonts": [gFont("Regular", 23),gFont("Regular", 16)],
+	"itemHeight": 50
+	}
+			</convert>
+		</widget>
+<ePixmap position="20,558" zPosition="1" size="170,2" pixmap="/usr/share/enigma2/skin_default/iconos/red.png" alphatest="blend" />
+	<widget source="key_red" render="Label" position="20,528" zPosition="2" size="170,30" font="Regular;20" halign="center" valign="center" backgroundColor="background" foregroundColor="foreground" transparent="1" />
+	<widget source="key_green" render="Label" position="185,528" zPosition="2" size="210,30" font="Regular;20" halign="center" valign="center" backgroundColor="background" foregroundColor="foreground" transparent="1" />
+	<ePixmap position="190,558" zPosition="1" size="200,2" pixmap="/usr/share/enigma2/skin_default/iconos/green.png" alphatest="blend" />
+	<widget source="key_blue" render="Label" position="350,528" zPosition="2" size="170,30" valign="center" halign="center" font="Regular;22" transparent="1" />
+	<ePixmap position="355,558" zPosition="1" size="170,2" pixmap="/usr/share/enigma2/skin_default/iconos/blue.png" transparent="1" alphatest="on" />
+</screen>"""
+	  
+	  
+	def __init__(self, session):
+		Screen.__init__(self, session)
+		self.session = session
+		self.setTitle(_("SFteam Magic Download"))
+		self.list = []
+		self["menu"] = List(self.list)
+		self.magiclist()
+		self["actions"] = ActionMap(["OkCancelActions", "ColorActions"],
+			{
+				"cancel": self.cancel,
+				"ok": self.ok,
+				"green": self.instalar,
+				"red": self.cancel,
+				"blue": self.borrar,
+			},-1)
+		self.list = [ ]
+		self["key_red"] = Label(_("Close"))
+		self["key_green"] = Label(_("Install"))
+		self["key_blue"] = Label(_("Remove"))
+		
+	def magiclist(self):
+		self.list = []
+		totorolist = os.popen("opkg list | grep secret")
+		magicpng = LoadPixmap(cached=True, path="/usr/share/enigma2/sfpanel/magic.png")
+		for line in totorolist.readlines():
+			try:
+				self.list.append(("%s %s" % (line.split(' - ')[0], line.split(' - ')[1]), line.split(' - ')[-1], magicpng))
+			except:
+				pass
+		totorolist.close()
+		self["menu"].setList(self.list)
+		
+	def ok(self):
+		self.instalar()
+
+	def borrar(self):
+		os.system("opkg remove %s" % self["menu"].getCurrent()[0])
+		self.mbox = self.session.open(MessageBox, _("%s is remove" % self["menu"].getCurrent()[0]), MessageBox.TYPE_INFO, timeout = 4 )
+		
+	def instalar(self):
+		os.system("opkg install -force-overwrite %s" % self["menu"].getCurrent()[0])
+		self.mbox = self.session.open(MessageBox, _("%s is installed" % self["menu"].getCurrent()[0]), MessageBox.TYPE_INFO, timeout = 4 )
+		
+	def cancel(self):
+		self.close()
+
 		
