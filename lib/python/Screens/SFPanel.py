@@ -41,6 +41,14 @@ def Check_ecccam():
 			break;
 	return found
 
+def Check_ipk():
+	found = False
+	for x in listdir('/usr/lib/enigma2/python/Screens/'):
+		if x.find('minstall.') > -1:
+			found = True
+			break;
+	return found
+
 def Check_magic():
 	found = False
 	for x in listdir('/etc/opkg/'):
@@ -243,6 +251,8 @@ class mainSFPanel(Screen):
 		self.sublist.append(SFSubMenuEntryComponent("Kernel Manager",_("Kernel Manager"),_("Informacion Kernel modules, Activacion")))
 		if Check_magic():
 			self.sublist.append(SFSubMenuEntryComponent(_("SFteam Magic"),_("Descargas privadas"),_('Descargas privadas del grupo SFteam')))
+		if Check_ipk():
+			self.sublist.append(SFSubMenuEntryComponent(_("Tools Ipk"),_("Tools Ipkg"),_('Herramientas instalacion paquetes')))
 		self["sublist"].l.setList(self.sublist)
 ######## Menu Multimedia ##############################
 	def SFMultimedia(self):
@@ -435,6 +445,9 @@ class mainSFPanel(Screen):
 		elif item[0] == _("SFteam Magic"):
 			import SFextra
 			self.session.open(SFextra.magicsfteam)
+		elif item[0] == _("Tools Ipk"):
+			import minstall
+			self.session.open(minstall.IPKToolsScreen2)
 
 
 
