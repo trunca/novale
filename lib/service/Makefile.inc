@@ -4,6 +4,7 @@ service_libenigma_service_a_CXXFLAGS = \
 	$(LIBXINE_CFLAGS)
 
 service_libenigma_service_a_SOURCES = \
+    service/servicemp3record.cpp \
 	service/event.cpp \
 	service/listboxservice.cpp \
 	service/service.cpp \
