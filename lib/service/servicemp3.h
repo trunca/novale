@@ -308,6 +308,8 @@ private:
 	bool m_use_chapter_entries;
 	/* CVR needed for user requested media pause */
 	bool m_user_paused;
+	/* last used seek position gst-1 only */
+	gint64 m_last_seek_pos;
 #endif
 	bufferInfo m_bufferInfo;
 	errorInfo m_errorInfo;
@@ -321,6 +323,7 @@ private:
 	int m_state;
 	GstElement *m_gst_playbin, *audioSink, *videoSink;
 	GstTagList *m_stream_tags;
+	guint m_bitrate;
 
 	eFixedMessagePump<ePtr<GstMessageContainer> > m_pump;
 
