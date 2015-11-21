@@ -26,7 +26,6 @@ serviceinclude_HEADERS = \
 	service/servicedvbrecord.h \
 	service/servicefs.h \
 	service/servicemp3.h \
-	service/servicemp3record.h \
 	service/servicem2ts.h \
 	service/servicedvbstream.h \
 	service/servicehdmi.h
