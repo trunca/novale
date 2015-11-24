@@ -57,6 +57,14 @@ def Check_magic():
 			break;
 	return found
 
+def stream():
+	found = False
+	for x in listdir('/media/usb/movie' and '/media/hdd/movie'):
+		if x.find('.stream') > -1:
+			found = True
+			break;
+	return found
+
 class mainSFPanel(Screen):
 	skin = """
 <screen name="mainSFPanel" position="center,center" size="1180,600" backgroundColor="black" flags="wfBorder">
@@ -196,6 +204,8 @@ class mainSFPanel(Screen):
 		self.list.append(SFMenuEntryComponent("Panel Drivers",_("Install drivers"),_("install drivers for receptor")))
 		self.list.append(SFMenuEntryComponent("Info Panel",_("Informacion receptor"),_("Informacion sobre receptor")))
 		self.list.append(SFMenuEntryComponent("Utilities Skin",_("Opciones extra skin"),_("Descarga skin part, configuracion weather")))
+		if stream():
+			self.list.append(SFMenuEntryComponent("Converter Stream",_("Converter stream for ts"),_("Convierte extension .stream a .ts")))
 		self["list"].l.setList(self.list)
 
 ######## Menu softcam ##############################
@@ -286,6 +296,12 @@ class mainSFPanel(Screen):
 		self.sublist.append(SFSubMenuEntryComponent("weather",_("Configuracion tiempo"),_("Configure tu zona weather")))
 		self.sublist.append(SFSubMenuEntryComponent("skinpart",_("Install skin part"),_("Install skin part for skin SF_HD")))
 		self["sublist"].l.setList(self.sublist)
+######## Menu STREAM ##############################
+	def SFstream(self):
+		self.sublist = []
+		self.sublist.append(SFSubMenuEntryComponent("HDD",_("Converter archivos en HDD"),_("Converter archivos .stream en HDD")))
+		self.sublist.append(SFSubMenuEntryComponent("USB",_("Converter archivos en USB"),_("Converter archivos .stream en USB")))
+		self["sublist"].l.setList(self.sublist)
 
 
 	def ok(self):
@@ -317,6 +333,8 @@ class mainSFPanel(Screen):
 			self.SFinfopanel()
 		elif item[0] == _("Utilities Skin"):
 			self.SFskin()
+		elif item[0] == _("Converter Stream"):
+			self.SFstream()
 		self["sublist"].selectionEnabled(0)
 #####################################################################
 ######## Seleccion menu sublista ##############################
@@ -496,7 +514,22 @@ class mainSFPanel(Screen):
 		elif item[0] == _("skinpart"):
 			import SFextra
             		self.session.open(SFextra.skinpart)
+######## Seleccion stream ##############################
+		if item[0] == _("HDD"):
+			self.streamhdd()
+		elif item[0] == _("USB"):
+			self.streamusb()
+
+######## SOFTWARE stream #######################
+	def streamhdd(self):
+		os.system('cd /media/hdd/movie; for f in *.stream; do mv ./"$f" "${f%stream}ts"; done')
+		self.mbox = self.session.open(MessageBox,(_(".ts creado")), MessageBox.TYPE_INFO, timeout = 4 )
 		
+			
+	def streamusb(self):
+		os.system('cd /media/usb/movie; for f in *.stream; do mv ./"$f" "${f%stream}ts"; done')
+		self.mbox = self.session.open(MessageBox,(_(".ts creado")), MessageBox.TYPE_INFO, timeout = 4 )
+				
 ######## SOFTWARE HERRAMIENTAS #######################
 	def backupfiles_choosen(self, ret):
 		config.plugins.configurationbackup.backupdirs.save()
