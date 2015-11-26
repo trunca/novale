@@ -59,11 +59,15 @@ def Check_magic():
 
 def stream():
 	found = False
-	for x in listdir('/media/usb/movie' and '/media/hdd/movie'):
-		if x.find('.stream') > -1:
-			found = True
-			break;
-	return found
+	try:
+		for x in listdir('/media/usb/movie' or '/media/hdd/movie'):
+			if x.find('.stream') > -1:
+				found = True
+				break;
+		return found
+	except:
+		pass
+
 
 class mainSFPanel(Screen):
 	skin = """
